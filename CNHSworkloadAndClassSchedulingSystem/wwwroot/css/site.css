@@ -34,10 +34,14 @@ body {
 
 .banner {
     background-color: maroon;
-    color: black;
     text-align: center;
     padding: 1rem;
     margin-bottom: 2rem;
+}
+
+.banner-title {
+    color: white; 
+    font-weight: bold; 
 }
 
 .login-card {
@@ -45,6 +49,7 @@ body {
     padding: 2rem;
     border-radius: 0.5rem;
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,.1);
+    margin-top: 2rem;
 }
 
 .school-logo {
