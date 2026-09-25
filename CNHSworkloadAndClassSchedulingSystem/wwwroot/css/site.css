@@ -57,3 +57,32 @@ body {
     margin: 1rem auto;
     display: block;
 }
+
+.bg-maroon {
+    background-color: maroon;
+}
+
+.thin-border {
+    border-bottom: 1px solid #222;
+    border-right: 1px solid #ccc;
+}
+
+.sidebar {
+    min-height: 100vh;
+}
+
+    .sidebar .nav-link {
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+    }
+
+        .sidebar .nav-link.active {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #f8f9fa;
+        }
