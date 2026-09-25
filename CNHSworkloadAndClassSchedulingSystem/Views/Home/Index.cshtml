@@ -1,8 +1,54 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome this is our CNHS Class Scheduling Web App</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid mt-4">
+    <h3 class="fw-bold mb-4">
+        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+    </h3>
+
+    <div class="row g-4">
+       
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-book display-3 text-primary mb-3"></i>
+                    <h4 class="card-title fw-bold">Subjects</h4>
+                    <p class="card-text">JHS 00 | SHS 00</p>
+                    <p class="card-text fw-semibold">00 Total Subjects</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-people display-3 text-success mb-3"></i>
+                    <h4 class="card-title fw-bold">Classes</h4>
+                    <p class="card-text">JHS 00 | SHS 00</p>
+                    <p class="card-text fw-semibold">00 Total Classes</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-person-badge display-3 text-warning mb-3"></i>
+                    <h4 class="card-title fw-bold">Teachers</h4>
+                    <p class="card-text fw-semibold">00 Total Teachers</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-person-circle display-3 text-info mb-3"></i>
+                    <h4 class="card-title fw-bold">Users</h4>
+                    <p class="card-text fw-semibold">00 Total Users</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
