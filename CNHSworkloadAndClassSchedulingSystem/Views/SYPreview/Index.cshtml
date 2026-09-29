@@ -3,3 +3,153 @@
 *@
 @{
 }
+@{
+    ViewData["Title"] = "S.Y Preview";
+}
+
+<div class="container-fluid">
+
+    <button class="btn btn-light border border-dark fw-bold fs-5 px-5 py-3"
+            data-bs-toggle="modal"
+            data-bs-target="#addSYModal">
+        Add S.Y +
+    </button>
+
+    <table class="table align-middle mt-4">
+
+        <thead>
+            <tr class="border-top border-bottom border-dark border-3">
+                <th>S.Y</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="syTable"></tbody>
+
+    </table>
+
+</div>
+
+
+<div class="modal fade" id="addSYModal">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Add School Year</h5>
+
+                <button class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <input id="syInput"
+                       class="form-control"
+                       placeholder="Example: 2026-2027">
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button class="btn btn-success"
+                        onclick="addSY()">
+                    Add
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function addSY() {
+
+        let year = document.getElementById("syInput").value;
+
+        if (year == "") {
+            alert("Please enter a school year.");
+            return;
+        }
+
+        document.getElementById("syTable").innerHTML += `
+            <tr>
+                <td>S.Y ${year}</td>
+
+                <td>
+                    <span class="badge bg-success">
+                        Current
+                    </span>
+                </td>
+
+                <td>
+                    <button class="btn btn-primary"
+                            onclick="editSY(this)">
+                        Edit
+                    </button>
+
+                    <button class="btn btn-danger"
+                            onclick="deleteSY(this)">
+                        Delete
+                    </button>
+
+                    <button class="btn btn-info text-white"
+                            onclick="viewSY(this)">
+                        View
+                    </button>
+                </td>
+            </tr>
+        `;
+
+        document.getElementById("syInput").value = "";
+
+        bootstrap.Modal
+            .getInstance(document.getElementById("addSYModal"))
+            .hide();
+    }
+
+
+    function editSY(button) {
+
+        let row = button.closest("tr");
+        let oldYear = row.cells[0].innerText.replace("S.Y ", "");
+
+        let newYear = prompt("Enter new school year:", oldYear);
+
+        if (newYear) {
+            row.cells[0].innerText = "S.Y " + newYear;
+        }
+    }
+
+
+    function deleteSY(button) {
+
+        if (confirm("Delete this school year?")) {
+            button.closest("tr").remove();
+        }
+    }
+
+
+    function viewSY(button) {
+
+        let row = button.closest("tr");
+        let year = row.cells[0].innerText;
+
+        alert("Viewing " + year);
+    }
+
+</script>
