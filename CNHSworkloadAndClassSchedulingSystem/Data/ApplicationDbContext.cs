@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using CNHSworkloadAndClassSchedulingSystem.Models;
+using CNHSworkloadAndClassSchedulingSystem.Models.Domain;
 
 namespace CNHSworkloadAndClassSchedulingSystem.Data
 {
@@ -11,6 +11,8 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
         {
         }
 
-        // Add DBSets for your application entities if needed
+        // Add DBSets for your application entities
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
     }
 }
