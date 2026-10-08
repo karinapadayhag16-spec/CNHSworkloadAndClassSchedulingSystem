@@ -1,3 +1,4 @@
+using CNHSworkloadAndClassSchedulingSystem.Models.Domain;
 using Microsoft.AspNetCore.Identity;
 
 namespace CNHSworkloadAndClassSchedulingSystem.Data
@@ -11,7 +12,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
         {
             using var scope = serviceProvider.CreateScope();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Models.ApplicationUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             // Create roles
             foreach (var role in Roles)
@@ -27,7 +28,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
             {
-                adminUser = new Models.ApplicationUser
+                adminUser = new Models.Domain.ApplicationUser
                 {
                     UserName = adminEmail,
                     Email = adminEmail,

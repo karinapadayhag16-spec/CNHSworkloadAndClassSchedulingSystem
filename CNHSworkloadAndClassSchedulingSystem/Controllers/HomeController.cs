@@ -1,4 +1,5 @@
 using CNHSworkloadAndClassSchedulingSystem.Models;
+using CNHSworkloadAndClassSchedulingSystem.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
