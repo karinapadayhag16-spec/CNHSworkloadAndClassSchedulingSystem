@@ -1,14 +1,20 @@
-﻿namespace CNHSworkloadAndClassSchedulingSystem.Models.Domain
+﻿using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
+
+namespace CNHSworkloadAndClassSchedulingSystem.Models.Domain
 {
     public class Subject
     {
-        public int SubjectId { get; set; }
-        public string? SubjectName { get; set; }
-        public string? Department { get; set; }
+        public int SubjectID { get; set; }
 
-        public int GradeLvl { get; set; }
-        public string? SectionId { get; set; }
-        public string? Difficulty { get; set; }
-        public int SubjectMins { get; set; }
+        public string SubjectName { get; set; }
+
+        public DifficultyLevel DifficultyLevel { get; set; }
+
+        public ICollection<TeacherExpertise> TeacherExpertises { get; set; }
+            = new List<TeacherExpertise>();
+
+        public ICollection<SubjectOffering> SubjectOfferings { get; set; }
+            = new List<SubjectOffering>();
     }
 }
+

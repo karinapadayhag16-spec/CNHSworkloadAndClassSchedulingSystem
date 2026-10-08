@@ -4,6 +4,7 @@ using CNHSworkloadAndClassSchedulingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CNHSworkloadAndClassSchedulingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261007113428_trial")]
+    partial class trial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,29 +99,6 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear", b =>
-                {
-                    b.Property<int>("SchoolYearId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchoolYearId"));
-
-                    b.Property<bool>("IsCurrent")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("YearLabel")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("SchoolYearId");
-
-                    b.HasIndex("YearLabel")
-                        .IsUnique()
-                        .HasFilter("[YearLabel] IS NOT NULL");
-
-                    b.ToTable("SchoolYear");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
