@@ -98,6 +98,29 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear", b =>
+                {
+                    b.Property<int>("SchoolYearId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchoolYearId"));
+
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("YearLabel")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("SchoolYearId");
+
+                    b.HasIndex("YearLabel")
+                        .IsUnique()
+                        .HasFilter("[YearLabel] IS NOT NULL");
+
+                    b.ToTable("SchoolYear");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")

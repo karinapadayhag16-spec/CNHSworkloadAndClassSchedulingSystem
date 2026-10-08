@@ -21,6 +21,7 @@ namespace CNHSworkloadAndClassSchedulingSystem
                 .AddDefaultTokenProviders();
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
@@ -35,8 +36,9 @@ namespace CNHSworkloadAndClassSchedulingSystem
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();
@@ -44,6 +46,8 @@ namespace CNHSworkloadAndClassSchedulingSystem
                 name: "default",
                 pattern: "{controller=Account}/{action=Login}/{id?}")
                 .WithStaticAssets();
+
+            app.MapRazorPages();
 
             app.Run();
         }

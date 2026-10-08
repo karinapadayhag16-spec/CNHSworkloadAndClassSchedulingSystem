@@ -2,12 +2,14 @@
 {
     public class Schedule
     {
-        public int ScheduleId { get; set; }
-        public int GradeLvl { get; set; }
-        public string? SectionId { get; set; }
-        public string? Dayset { get; set; }
-        public string? Department { get; set; }
-        public string? TeacherSet { get; set; }
-        public string? SchoolTimeId { get; set; }
+        public int ScheduleID { get; set; }
+        public int SubjectOfferingID { get; set; }
+        public SubjectOffering SubjectOffering { get; set; }
+        public int TeacherID { get; set; }
+        public Teacher Teacher { get; set; }
+
+        public int TimePeriodID { get; set; }
+        public TimePeriod TimePeriod { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
     }
 }
