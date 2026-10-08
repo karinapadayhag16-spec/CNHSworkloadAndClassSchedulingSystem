@@ -1,4 +1,4 @@
-namespace CNHSworkloadAndClassSchedulingSystem.Models
+namespace CNHSworkloadAndClassSchedulingSystem.Models.ViewModels
 {
     public class ErrorViewModel
     {

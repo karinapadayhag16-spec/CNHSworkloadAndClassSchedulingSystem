@@ -1,27 +1,25 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@{
-    ViewData["Title"] = "S.Y Preview";
+﻿@{
+    ViewData["Title"] = "School Year";
 }
 
-<div class="container-fluid">
+<div class="container mt-4">
 
-    <button class="btn btn-light border border-dark fw-bold fs-5 px-5 py-3"
-            data-bs-toggle="modal"
-            data-bs-target="#addSYModal">
-        Add S.Y +
-    </button>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">School Year Management</h2>
 
-    <table class="table align-middle mt-4">
+        <button class="btn btn-success"
+                data-bs-toggle="modal"
+                data-bs-target="#addSYModal">
+            + Add School Year
+        </button>
+    </div>
 
-        <thead>
-            <tr class="border-top border-bottom border-dark border-3">
-                <th>S.Y</th>
+    <table class="table table-bordered table-hover text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>School Year</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th width="300">Actions</th>
             </tr>
         </thead>
 
@@ -32,6 +30,7 @@
 </div>
 
 
+<!-- ADD MODAL -->
 <div class="modal fade" id="addSYModal">
 
     <div class="modal-dialog">
@@ -39,7 +38,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5>Add School Year</h5>
+                <h5 class="modal-title">Add School Year</h5>
 
                 <button class="btn-close"
                         data-bs-dismiss="modal">
@@ -48,9 +47,14 @@
 
             <div class="modal-body">
 
-                <input id="syInput"
+                <label class="form-label">
+                    School Year
+                </label>
+
+                <input type="text"
+                       id="syInput"
                        class="form-control"
-                       placeholder="Example: 2026-2027">
+                       placeholder="2026-2027">
 
             </div>
 
@@ -63,7 +67,57 @@
 
                 <button class="btn btn-success"
                         onclick="addSY()">
-                    Add
+                    Save
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- EDIT MODAL -->
+<div class="modal fade" id="editSYModal">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Edit School Year</h5>
+
+                <button class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="editRowIndex">
+
+                <label class="form-label">
+                    School Year
+                </label>
+
+                <input type="text"
+                       id="editSYInput"
+                       class="form-control">
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button class="btn btn-primary"
+                        onclick="updateSY()">
+                    Update
                 </button>
 
             </div>
@@ -79,16 +133,18 @@
 
     function addSY() {
 
-        let year = document.getElementById("syInput").value;
+        let year = document.getElementById("syInput").value.trim();
 
-        if (year == "") {
-            alert("Please enter a school year.");
+        let pattern = /^\d{4}-\d{4}$/;
+
+        if (!pattern.test(year)) {
+            alert("Format should be YYYY-YYYY");
             return;
         }
 
-        document.getElementById("syTable").innerHTML += `
+        let row = `
             <tr>
-                <td>S.Y ${year}</td>
+                <td>${year}</td>
 
                 <td>
                     <span class="badge bg-success">
@@ -97,23 +153,26 @@
                 </td>
 
                 <td>
-                    <button class="btn btn-primary"
+
+                    <button class="btn btn-warning btn-sm"
                             onclick="editSY(this)">
                         Edit
                     </button>
 
-                    <button class="btn btn-danger"
+                    <button class="btn btn-danger btn-sm"
                             onclick="deleteSY(this)">
                         Delete
                     </button>
 
-                    <button class="btn btn-info text-white"
+                    <button class="btn btn-info btn-sm text-white"
                             onclick="viewSY(this)">
                         View
                     </button>
+
                 </td>
-            </tr>
-        `;
+            </tr>`;
+
+        document.getElementById("syTable").innerHTML += row;
 
         document.getElementById("syInput").value = "";
 
@@ -126,20 +185,44 @@
     function editSY(button) {
 
         let row = button.closest("tr");
-        let oldYear = row.cells[0].innerText.replace("S.Y ", "");
 
-        let newYear = prompt("Enter new school year:", oldYear);
+        document.getElementById("editRowIndex").value =
+            row.rowIndex;
 
-        if (newYear) {
-            row.cells[0].innerText = "S.Y " + newYear;
-        }
+        document.getElementById("editSYInput").value =
+            row.cells[0].innerText;
+
+        new bootstrap.Modal(
+            document.getElementById("editSYModal")
+        ).show();
+    }
+
+
+    function updateSY() {
+
+        let index =
+            document.getElementById("editRowIndex").value;
+
+        let value =
+            document.getElementById("editSYInput").value;
+
+        let table =
+            document.getElementById("syTable");
+
+        table.rows[index - 1].cells[0].innerText = value;
+
+        bootstrap.Modal
+            .getInstance(document.getElementById("editSYModal"))
+            .hide();
     }
 
 
     function deleteSY(button) {
 
-        if (confirm("Delete this school year?")) {
+        if (confirm("Delete this School Year?")) {
+
             button.closest("tr").remove();
+
         }
     }
 
@@ -147,9 +230,14 @@
     function viewSY(button) {
 
         let row = button.closest("tr");
-        let year = row.cells[0].innerText;
 
-        alert("Viewing " + year);
+        let sy = row.cells[0].innerText;
+        let status = row.cells[1].innerText;
+
+        alert(
+            "School Year: " + sy +
+            "\nStatus: " + status
+        );
     }
 
 </script>
