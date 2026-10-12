@@ -12,3 +12,4 @@
         public ICollection<TimePeriod> TimePeriods { get; set; } = new List<TimePeriod>();
     }
 }
+
