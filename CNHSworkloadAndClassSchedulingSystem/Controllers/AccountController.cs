@@ -1,5 +1,6 @@
 ﻿using CNHSworkloadAndClassSchedulingSystem.Models.Domain;
 using CNHSworkloadAndClassSchedulingSystem.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,6 +55,14 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return View(model);
             }
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
         }
     }
 }
