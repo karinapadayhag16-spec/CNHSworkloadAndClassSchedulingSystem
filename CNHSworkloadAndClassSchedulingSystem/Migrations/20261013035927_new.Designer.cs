@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CNHSworkloadAndClassSchedulingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261008034738_new migration")]
-    partial class newmigration
+    [Migration("20261013035927_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -488,7 +488,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                     b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher", "Adviser")
                         .WithMany()
                         .HasForeignKey("AdviserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear", "SchoolYear")

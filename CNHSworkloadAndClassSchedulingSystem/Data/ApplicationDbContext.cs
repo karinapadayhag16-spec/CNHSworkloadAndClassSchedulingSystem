@@ -18,6 +18,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
         {
             base.OnModelCreating(modelBuilder);
 
+
             modelBuilder.Entity<SchoolYear>()
                 .HasIndex(s => s.YearLabel)
                 .IsUnique();
@@ -104,7 +105,6 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
                 .HasForeignKey(s => s.TimePeriodID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Prevent teacher schedule conflicts
             modelBuilder.Entity<Schedule>()
                 .HasIndex(s => new
                 {
@@ -113,6 +113,12 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
                     s.DayOfWeek
                 })
                 .IsUnique();
+
+            modelBuilder.Entity<ClassSection>()
+                .HasOne(c => c.Adviser)
+                .WithMany()
+                .HasForeignKey(c => c.AdviserID)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

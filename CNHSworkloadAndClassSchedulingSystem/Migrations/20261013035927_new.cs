@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CNHSworkloadAndClassSchedulingSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class newmigration : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -254,8 +254,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                         name: "FK_ClassSection_Teacher_AdviserID",
                         column: x => x.AdviserID,
                         principalTable: "Teacher",
-                        principalColumn: "TeacherID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "TeacherID");
                 });
 
             migrationBuilder.CreateTable(

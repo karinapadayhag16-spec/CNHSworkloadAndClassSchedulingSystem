@@ -485,7 +485,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                     b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher", "Adviser")
                         .WithMany()
                         .HasForeignKey("AdviserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear", "SchoolYear")
