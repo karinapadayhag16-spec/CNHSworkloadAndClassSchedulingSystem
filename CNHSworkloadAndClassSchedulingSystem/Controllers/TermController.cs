@@ -2,7 +2,7 @@
 
 namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 {
-    public class Schedule : Controller
+    public class TermController : Controller
     {
         public IActionResult Index()
         {

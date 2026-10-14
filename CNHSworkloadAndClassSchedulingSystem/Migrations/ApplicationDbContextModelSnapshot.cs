@@ -183,7 +183,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                         .IsUnique()
                         .HasFilter("[YearLabel] IS NOT NULL");
 
-                    b.ToTable("SchoolYear");
+                    b.ToTable("SchoolYears");
                 });
 
             modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Subject", b =>
