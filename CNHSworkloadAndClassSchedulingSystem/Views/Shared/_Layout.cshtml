@@ -16,6 +16,17 @@
             <img src="~/images/logo.png" alt="Corella NHS Logo" width="35" height="35" class="me-2" />
             <h5 class="text-white fw-bold mb-0">CORELLA NATIONAL HIGH SCHOOL</h5>
         </div>
+
+        <li class="nav-item">
+            <span class="nav-link">
+                <i class="bi bi-calendar3"></i>
+                School Year:
+                <strong>
+                    @await Component.InvokeAsync("CurrentSchoolYear")
+                </strong>
+            </span>
+        </li>
+
     </header>
 
     <div class="d-flex" style="margin-top:60px;">

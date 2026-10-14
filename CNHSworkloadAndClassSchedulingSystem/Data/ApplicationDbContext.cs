@@ -11,9 +11,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
         {
         }
 
-        // Add DBSets for your application entities
+        // DBSets for application entities
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<SchoolYear> SchoolYears { get; set; }
+
+        public DbSet<Term> Terms { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

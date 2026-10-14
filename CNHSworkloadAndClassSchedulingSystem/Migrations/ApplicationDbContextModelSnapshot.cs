@@ -299,6 +299,9 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TermID"));
 
+                    b.Property<int>("InstructionalDays")
+                        .HasColumnType("int");
+
                     b.Property<int>("SchoolYearID")
                         .HasColumnType("int");
 
@@ -310,7 +313,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                     b.HasIndex("SchoolYearID", "TermNumber")
                         .IsUnique();
 
-                    b.ToTable("Term");
+                    b.ToTable("Terms");
                 });
 
             modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.TimePeriod", b =>
