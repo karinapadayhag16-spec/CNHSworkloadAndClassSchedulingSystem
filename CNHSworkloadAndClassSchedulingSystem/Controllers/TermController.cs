@@ -15,9 +15,16 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var terms = await _context.Terms
+                .Include(t => t.SchoolYear)
+                .OrderByDescending(t => t.SchoolYearID)
+                .ThenBy(t => t.TermNumber)
+                .ToListAsync();
+
+            return View(terms);
         }
 
         [HttpGet]
@@ -51,8 +58,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddTerm(
-            AddTermViewModel viewModel)
+        public async Task<IActionResult> AddTerm(AddTermViewModel viewModel)
         {
             var currentSchoolYear = await _context.SchoolYears
                 .FirstOrDefaultAsync(sy => sy.IsCurrent);
@@ -92,10 +98,63 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             };
 
             _context.Terms.Add(term);
+
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] =
                 $"Term {term.TermNumber} was added successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditTerm(int id)
+        {
+            var term = await _context.Terms
+                .Include(t => t.SchoolYear)
+                .FirstOrDefaultAsync(t => t.TermID == id);
+
+            if (term == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new AddTermViewModel
+            {
+                SchoolYearLabel = term.SchoolYear.YearLabel,
+                TermNumber = term.TermNumber,
+                InstructionalDays = term.InstructionalDays
+            };
+
+            ViewBag.TermID = term.TermID;
+
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditTerm(
+    int id,
+    AddTermViewModel viewModel)
+        {
+            var term = await _context.Terms
+                .FirstOrDefaultAsync(t => t.TermID == id);
+
+            if (term == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            term.InstructionalDays = viewModel.InstructionalDays;
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] =
+                "Term updated successfully.";
 
             return RedirectToAction(nameof(Index));
         }

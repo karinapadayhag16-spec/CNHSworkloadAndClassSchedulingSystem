@@ -1,95 +1,127 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.AddTermViewModel
+﻿@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.AddTermViewModel
 
 @{
     ViewData["Title"] = "Add Term";
 }
 
 <div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Add Term</h4>
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-primary">
+
+                    <h3 class="mb-0 fw-bold text-white">
+
+                        <i class="bi bi-plus-circle"></i>
+                        Add Term
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-action="AddTerm"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Current School Year
+                            </label>
+
+                            <input value="@Model.SchoolYearLabel"
+                                   class="form-control"
+                                   style="width:70%;"
+                                   readonly />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="TermNumber"
+                                   class="form-label">
+                                Term Number
+                            </label>
+
+                            <input asp-for="TermNumber"
+                                   class="form-control"
+                                   style="width:70%;"
+                                   min="1"
+                                   max="100"
+                                   readonly />
+
+                            <span asp-validation-for="TermNumber"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="InstructionalDays"
+                                   class="form-label">
+                                Instructional Days
+                            </label>
+
+                            <input asp-for="InstructionalDays"
+                                   class="form-control"
+                                   style="width:70%;"
+                                   min="1"
+                                   max="365"
+                                   placeholder="e.g. 54" />
+
+                            <span asp-validation-for="InstructionalDays"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-success">
+
+                                <i class="bi bi-save"></i>
+                                Save
+
+                            </button>
+
+                            <a asp-controller="Term"
+                               asp-action="Index"
+                               class="btn btn-secondary">
+
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="card-body">
-
-            <form asp-controller="Term"
-                  asp-action="AddTerm"
-                  method="post">
-
-                @Html.AntiForgeryToken()
-
-                <div asp-validation-summary="ModelOnly"
-                     class="text-danger mb-3"></div>
-
-                <div class="mb-3">
-                    <label class="form-label">
-                        Current School Year
-                    </label>
-
-                    <input value="@Model.SchoolYearLabel"
-                           class="form-control"
-                           readonly />
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="TermNumber"
-                           class="form-label"></label>
-
-                    <input asp-for="TermNumber"
-                           type="number"
-                           class="form-control"
-                           min="1"
-                           max="100" />
-
-                    <span asp-validation-for="TermNumber"
-                          class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="InstructionalDays"
-                           class="form-label"></label>
-
-                    <input asp-for="InstructionalDays"
-                           type="number"
-                           class="form-control"
-                           min="1"
-                           max="365"
-                           placeholder="e.g. 54" />
-
-                    <span asp-validation-for="InstructionalDays"
-                          class="text-danger"></span>
-
-                    <small class="text-muted">
-                        Enter the number of instructional days
-                        allocated to this term.
-                    </small>
-                </div>
-
-                <div class="d-flex gap-2">
-                    <button type="submit"
-                            class="btn btn-primary">
-                        <i class="bi bi-save"></i>
-                        Save Term
-                    </button>
-
-                    <a asp-controller="Term"
-                       asp-action="Index"
-                       class="btn btn-secondary">
-                        Cancel
-                    </a>
-                </div>
-
-            </form>
-        </div>
     </div>
+
 </div>
 
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
+
 }
