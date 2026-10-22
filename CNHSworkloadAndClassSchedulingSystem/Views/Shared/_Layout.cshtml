@@ -26,7 +26,7 @@
                      class="me-2" />
 
                 <h5 class="text-white fw-bold mb-0">
-                    CORELLA NATIONAL HIGH SCHOOL
+                    AFaWSS
                 </h5>
 
             </div>
@@ -107,7 +107,7 @@
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Teachers" ? "active" : "")"
-                       asp-controller="Teachers"
+                       asp-controller="Teacher"
                        asp-action="Index">
                         <i class="bi bi-person-badge me-2"></i>
                         Teachers
@@ -116,7 +116,7 @@
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Subjects" ? "active" : "")"
-                       asp-controller="Subjects"
+                       asp-controller="Subject"
                        asp-action="Index">
                         <i class="bi bi-book me-2"></i>
                         Subjects
