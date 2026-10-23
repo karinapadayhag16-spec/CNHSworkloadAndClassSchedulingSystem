@@ -28,56 +28,81 @@
                         </div>
 
                         <div class="mb-3">
+
                             <label asp-for="StartYear" class="form-label">
                                 Start Year
                             </label>
 
                             <input asp-for="StartYear"
                                    class="form-control"
-                                   style="width:70%;" />
+                                   style="width:70%;"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="right"
+                                   title="Enter the starting year of the School Year" />
 
                             <span asp-validation-for="StartYear"
                                   class="text-danger">
                             </span>
+
                         </div>
 
                         <div class="mb-3">
+
                             <label asp-for="EndYear" class="form-label">
                                 End Year
                             </label>
 
                             <input asp-for="EndYear"
                                    class="form-control"
-                                   style="width:70%;" />
+                                   style="width:70%;"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="right"
+                                   title="Enter the ending year of the School Year" />
 
                             <span asp-validation-for="EndYear"
                                   class="text-danger">
                             </span>
+
                         </div>
 
                         <div class="form-check mb-4">
+
                             <input asp-for="IsCurrent"
                                    class="form-check-input"
-                                   id="currentSchoolYear" />
+                                   id="currentSchoolYear"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="right"
+                                   title="Set this School Year as the active School Year" />
 
                             <label asp-for="IsCurrent"
                                    class="form-check-label">
                                 Current School Year
                             </label>
+
                         </div>
 
                         <div class="d-flex gap-2">
 
                             <button type="submit"
-                                    class="btn btn-success">
+                                    class="btn btn-success"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Save this new School Year">
+
                                 <i class="bi bi-save"></i>
                                 Save
+
                             </button>
 
                             <a asp-action="Index"
-                               class="btn btn-secondary">
+                               class="btn btn-secondary"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Return to the School Year list">
+
                                 <i class="bi bi-arrow-left-circle"></i>
                                 Back
+
                             </a>
 
                         </div>
@@ -109,8 +134,10 @@
 
                 <h5 class="modal-title"
                     id="currentSchoolYearModalLabel">
+
                     <i class="bi bi-exclamation-triangle-fill"></i>
                     Warning
+
                 </h5>
 
                 <button type="button"
@@ -134,7 +161,7 @@
                     </p>
 
                     <p class="mb-0">
-                        This will automatically remove the Current status
+                        This action will automatically remove the Current status
                         from any existing School Year that is currently active.
                     </p>
 
@@ -153,8 +180,10 @@
                 <button type="button"
                         class="btn btn-danger"
                         id="confirmCurrentSchoolYear">
+
                     <i class="bi bi-check-circle"></i>
                     Yes, Set as Current
+
                 </button>
 
             </div>
@@ -173,6 +202,19 @@
 
         document.addEventListener("DOMContentLoaded", function() {
 
+            // Enable Tooltips
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+            // Current School Year Modal
             const checkbox =
                 document.getElementById("currentSchoolYear");
 
@@ -197,6 +239,7 @@
                     checkbox.checked = false;
 
                     modal.show();
+
                 }
 
             });

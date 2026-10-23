@@ -43,7 +43,10 @@
                             <input value="@Model.SchoolYearLabel"
                                    class="form-control"
                                    style="width:70%;"
-                                   readonly />
+                                   readonly
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="right"
+                                   title="Displays the current active School Year" />
 
                         </div>
 
@@ -59,7 +62,10 @@
                                    style="width:70%;"
                                    min="1"
                                    max="100"
-                                   readonly />
+                                   readonly
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="right"
+                                   title="Displays the next available Term Number" />
 
                             <span asp-validation-for="TermNumber"
                                   class="text-danger">
@@ -79,7 +85,10 @@
                                    style="width:70%;"
                                    min="1"
                                    max="365"
-                                   placeholder="e.g. 54" />
+                                   placeholder="e.g. 54"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="right"
+                                   title="Enter the number of instructional days for this term" />
 
                             <span asp-validation-for="InstructionalDays"
                                   class="text-danger">
@@ -90,7 +99,10 @@
                         <div class="d-flex gap-2">
 
                             <button type="submit"
-                                    class="btn btn-success">
+                                    class="btn btn-success"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Save this new Term">
 
                                 <i class="bi bi-save"></i>
                                 Save
@@ -99,7 +111,10 @@
 
                             <a asp-controller="Term"
                                asp-action="Index"
-                               class="btn btn-secondary">
+                               class="btn btn-secondary"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Return to the Term list">
 
                                 <i class="bi bi-arrow-left-circle"></i>
                                 Back
@@ -123,5 +138,24 @@
 @section Scripts {
 
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
 
 }

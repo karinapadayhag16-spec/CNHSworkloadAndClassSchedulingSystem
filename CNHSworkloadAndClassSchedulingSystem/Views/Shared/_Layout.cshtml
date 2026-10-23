@@ -67,81 +67,126 @@
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")"
                        asp-controller="Home"
-                       asp-action="Index">
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="View dashboard overview">
+
                         <i class="bi bi-speedometer2 me-2"></i>
                         Dashboard
+
                     </a>
                 </li>
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "SchoolYear" ? "active" : "")"
                        asp-controller="SchoolYear"
-                       asp-action="Index">
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Manage School Years">
+
                         <i class="bi bi-calendar3 me-2"></i>
                         School Years
+
                     </a>
                 </li>
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Term" ? "active" : "")"
                        asp-controller="Term"
-                       asp-action="Index">
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Manage Academic Terms">
+
                         <i class="bi bi-calendar2 me-2"></i>
                         Terms
+
                     </a>
                 </li>
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "TimeSched" ? "active" : "")"
                        asp-controller="TimeSched"
-                       asp-action="Index">
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Manage Time Schedules">
+
                         <i class="bi bi-clock me-2"></i>
                         Time Sched
+
                     </a>
                 </li>
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Classes" ? "active" : "")"
                        asp-controller="Classes"
-                       asp-action="Index">
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Manage Classes">
+
                         <i class="bi bi-people me-2"></i>
                         Classes
+
                     </a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Teachers" ? "active" : "")"
+                    <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Teacher" ? "active" : "")"
                        asp-controller="Teacher"
-                       asp-action="Index">
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Manage Teachers">
+
                         <i class="bi bi-person-badge me-2"></i>
                         Teachers
+
                     </a>
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Subjects" ? "active" : "")"
+                    <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Subject" ? "active" : "")"
                        asp-controller="Subject"
-                       asp-action="Index">
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Manage Subjects">
+
                         <i class="bi bi-book me-2"></i>
                         Subjects
+
                     </a>
                 </li>
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Schedule" ? "active" : "")"
                        asp-controller="Schedule"
-                       asp-action="Index">
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Generate and Manage Schedules">
+
                         <i class="bi bi-calendar-check me-2"></i>
                         Schedule
+
                     </a>
                 </li>
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "UserSetting" ? "active" : "")"
                        asp-controller="UserSetting"
-                       asp-action="Index">
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Manage User Settings">
+
                         <i class="bi bi-gear me-2"></i>
                         User Setting
+
                     </a>
                 </li>
 
@@ -154,7 +199,10 @@
                       method="post">
 
                     <button type="submit"
-                            class="btn btn-danger w-100 fw-bold">
+                            class="btn btn-danger w-100 fw-bold"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="right"
+                            title="Sign out of the system">
 
                         <i class="bi bi-box-arrow-right me-2"></i>
                         Log Out
@@ -189,6 +237,23 @@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function() {
+
+                var tooltipTriggerList =
+                    [].slice.call(
+                        document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                    );
+
+                tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                    new bootstrap.Tooltip(tooltipTriggerEl);
+
+                });
+
+            });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

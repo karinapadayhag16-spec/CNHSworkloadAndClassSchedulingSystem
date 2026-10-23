@@ -7,23 +7,36 @@
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="fw-bold">School Year Management</h2>
+
+        <h2 class="fw-bold">
+            School Year Management
+        </h2>
 
         <a asp-controller="SchoolYear"
            asp-action="AddSchoolYear"
-           class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Add School Year
+           class="btn btn-primary"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           title="Add a new School Year to the system">
+
+            <i class="bi bi-plus-circle"></i>
+            Add School Year
+
         </a>
+
     </div>
 
     <table class="table table-bordered table-hover text-center">
+
         <thead class="table-dark">
+
             <tr>
                 <th width="80">#</th>
                 <th>School Year</th>
                 <th>Status</th>
                 <th width="150">Actions</th>
             </tr>
+
         </thead>
 
         <tbody>
@@ -58,13 +71,20 @@
                         </td>
 
                         <td>
+
                             <a asp-controller="SchoolYear"
                                asp-action="EditSchoolYear"
                                asp-route-id="@schoolYear.SchoolYearId"
-                               class="btn btn-warning btn-sm">
+                               class="btn btn-warning btn-sm"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Edit this School Year">
+
                                 <i class="bi bi-pencil-square"></i>
                                 Edit
+
                             </a>
+
                         </td>
 
                     </tr>
@@ -75,9 +95,14 @@
             else
             {
                 <tr>
-                    <td colspan="4" class="text-muted py-4">
+
+                    <td colspan="4"
+                        class="text-muted py-4">
+
                         No school years have been added yet.
+
                     </td>
+
                 </tr>
             }
 
@@ -86,3 +111,26 @@
     </table>
 
 </div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}

@@ -1,8 +1,8 @@
-﻿@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.Term>
-
-@{
+﻿@{
     ViewData["Title"] = "Term";
 }
+
+@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.Term>
 
 <div class="container mt-4">
 
@@ -14,7 +14,10 @@
 
         <a asp-controller="Term"
            asp-action="AddTerm"
-           class="btn btn-primary">
+           class="btn btn-primary"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           title="Add a new Term to a School Year">
 
             <i class="bi bi-plus-circle"></i>
             Add Term
@@ -70,7 +73,10 @@
                             <a asp-controller="Term"
                                asp-action="EditTerm"
                                asp-route-id="@term.TermID"
-                               class="btn btn-warning btn-sm">
+                               class="btn btn-warning btn-sm"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Edit this Term">
 
                                 <i class="bi bi-pencil-square"></i>
                                 Edit
@@ -103,3 +109,26 @@
     </table>
 
 </div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}
