@@ -98,6 +98,71 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection", b =>
+                {
+                    b.Property<int>("ClassSectionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassSectionID"));
+
+                    b.Property<int>("AdviserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Department")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GradeLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SchoolYearID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SectionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ClassSectionID");
+
+                    b.HasIndex("AdviserID");
+
+                    b.HasIndex("SchoolYearID");
+
+                    b.ToTable("ClassSection");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Schedule", b =>
+                {
+                    b.Property<int>("ScheduleID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleID"));
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectOfferingID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimePeriodID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ScheduleID");
+
+                    b.HasIndex("SubjectOfferingID");
+
+                    b.HasIndex("TimePeriodID");
+
+                    b.HasIndex("TeacherID", "TimePeriodID", "DayOfWeek")
+                        .IsUnique();
+
+                    b.ToTable("Schedule");
+                });
+
             modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear", b =>
                 {
                     b.Property<int>("SchoolYearId")
@@ -119,6 +184,167 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                         .HasFilter("[YearLabel] IS NOT NULL");
 
                     b.ToTable("SchoolYear");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Subject", b =>
+                {
+                    b.Property<int>("SubjectID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubjectID"));
+
+                    b.Property<int>("DifficultyLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SubjectID");
+
+                    b.ToTable("Subject");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SubjectOffering", b =>
+                {
+                    b.Property<int>("SubjectOfferingID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubjectOfferingID"));
+
+                    b.Property<int>("ClassSectionID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequiredMinutesPerWeek")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TermID")
+                        .HasColumnType("int");
+
+                    b.HasKey("SubjectOfferingID");
+
+                    b.HasIndex("ClassSectionID");
+
+                    b.HasIndex("TermID");
+
+                    b.HasIndex("SubjectID", "ClassSectionID", "TermID")
+                        .IsUnique();
+
+                    b.ToTable("SubjectOffering");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher", b =>
+                {
+                    b.Property<int>("TeacherID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherID"));
+
+                    b.Property<int>("Department")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SchoolYearID")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeacherID");
+
+                    b.HasIndex("SchoolYearID");
+
+                    b.ToTable("Teacher");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.TeacherExpertise", b =>
+                {
+                    b.Property<int>("TeacherExpertiseID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeacherExpertiseID"));
+
+                    b.Property<int>("SubjectID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherID")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeacherExpertiseID");
+
+                    b.HasIndex("SubjectID");
+
+                    b.HasIndex("TeacherID", "SubjectID")
+                        .IsUnique();
+
+                    b.ToTable("TeacherExpertise");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Term", b =>
+                {
+                    b.Property<int>("TermID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TermID"));
+
+                    b.Property<int>("SchoolYearID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TermNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("TermID");
+
+                    b.HasIndex("SchoolYearID", "TermNumber")
+                        .IsUnique();
+
+                    b.ToTable("Term");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.TimePeriod", b =>
+                {
+                    b.Property<int>("TimePeriodId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TimePeriodId"));
+
+                    b.Property<int>("Department")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsBreak")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PeriodNumber")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("TermID")
+                        .HasColumnType("int");
+
+                    b.HasKey("TimePeriodId");
+
+                    b.HasIndex("TermID", "Department", "PeriodNumber")
+                        .IsUnique();
+
+                    b.ToTable("TimePeriod");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -254,6 +480,131 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection", b =>
+                {
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher", "Adviser")
+                        .WithMany()
+                        .HasForeignKey("AdviserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear", "SchoolYear")
+                        .WithMany()
+                        .HasForeignKey("SchoolYearID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adviser");
+
+                    b.Navigation("SchoolYear");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Schedule", b =>
+                {
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SubjectOffering", "SubjectOffering")
+                        .WithMany()
+                        .HasForeignKey("SubjectOfferingID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.TimePeriod", "TimePeriod")
+                        .WithMany()
+                        .HasForeignKey("TimePeriodID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SubjectOffering");
+
+                    b.Navigation("Teacher");
+
+                    b.Navigation("TimePeriod");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SubjectOffering", b =>
+                {
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection", "ClassSection")
+                        .WithMany()
+                        .HasForeignKey("ClassSectionID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Subject", "Subject")
+                        .WithMany("SubjectOfferings")
+                        .HasForeignKey("SubjectID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Term", "Term")
+                        .WithMany()
+                        .HasForeignKey("TermID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ClassSection");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Term");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher", b =>
+                {
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear", "SchoolYear")
+                        .WithMany()
+                        .HasForeignKey("SchoolYearID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SchoolYear");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.TeacherExpertise", b =>
+                {
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Subject", "Subject")
+                        .WithMany("TeacherExpertises")
+                        .HasForeignKey("SubjectID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher", "Teacher")
+                        .WithMany("SubjectExpertise")
+                        .HasForeignKey("TeacherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Term", b =>
+                {
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear", "SchoolYear")
+                        .WithMany("Terms")
+                        .HasForeignKey("SchoolYearID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SchoolYear");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.TimePeriod", b =>
+                {
+                    b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Term", "Term")
+                        .WithMany("TimePeriods")
+                        .HasForeignKey("TermID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Term");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -303,6 +654,28 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear", b =>
+                {
+                    b.Navigation("Terms");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Subject", b =>
+                {
+                    b.Navigation("SubjectOfferings");
+
+                    b.Navigation("TeacherExpertises");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher", b =>
+                {
+                    b.Navigation("SubjectExpertise");
+                });
+
+            modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Term", b =>
+                {
+                    b.Navigation("TimePeriods");
                 });
 #pragma warning restore 612, 618
         }
