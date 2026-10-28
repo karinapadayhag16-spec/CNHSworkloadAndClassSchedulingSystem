@@ -11,12 +11,17 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
         {
         }
 
-        // Add DBSets for your application entities
+        // DBSets for application entities
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<SchoolYear> SchoolYears { get; set; }
+
+        public DbSet<Term> Terms { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
 
             modelBuilder.Entity<SchoolYear>()
                 .HasIndex(s => s.YearLabel)
@@ -104,7 +109,6 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
                 .HasForeignKey(s => s.TimePeriodID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Prevent teacher schedule conflicts
             modelBuilder.Entity<Schedule>()
                 .HasIndex(s => new
                 {
@@ -113,6 +117,12 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
                     s.DayOfWeek
                 })
                 .IsUnique();
+
+            modelBuilder.Entity<ClassSection>()
+                .HasOne(c => c.Adviser)
+                .WithMany()
+                .HasForeignKey(c => c.AdviserID)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 {
-    public class UserSetting : Controller
+    public class UserSettingController : Controller
     {
         public IActionResult Index()
         {

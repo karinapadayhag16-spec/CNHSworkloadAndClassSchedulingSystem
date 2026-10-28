@@ -1,20 +1,24 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
@@ -22,15 +26,16 @@ body {
     background-color: #f8f9fa;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
 }
-
 
 .banner {
     background-color: maroon;
@@ -40,8 +45,8 @@ body {
 }
 
 .banner-title {
-    color: white; 
-    font-weight: bold; 
+    color: white;
+    font-weight: bold;
 }
 
 .login-card {
@@ -71,18 +76,100 @@ body {
     min-height: 100vh;
 }
 
-    .sidebar .nav-link {
-        color: #333;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 0.5rem 1rem;
+/* =========================
+   HEADER
+   ========================= */
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding-left: 15px;
+    padding-right: 30px;
+}
+
+.current-school-year {
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+    .current-school-year i {
+        margin-right: 5px;
     }
 
-        .sidebar .nav-link.active {
-            background-color: #e9ecef;
-            font-weight: bold;
+    .current-school-year strong {
+        color: white;
+        margin-left: 5px;
+    }
+
+.sidebar .nav-link {
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+    .sidebar .nav-link:hover {
+        background-color: maroon;
+        color: white !important;
+        border-color: maroon;
+    }
+
+        .sidebar .nav-link:hover i {
+            color: white !important;
         }
 
-        .sidebar .nav-link:hover {
-            background-color: #f8f9fa;
+
+    .sidebar .nav-link.active {
+        background-color: maroon;
+        color: white !important;
+        border-color: maroon;
+        font-weight: bold;
+    }
+
+        .sidebar .nav-link.active i {
+            color: white !important;
         }
+
+    .sidebar .nav-link i {
+        transition: all 0.3s ease;
+    }
+
+.footer {
+    background-color: #fff;
+}
+/*ToolTip Bubble*/
+.tooltip-inner {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: #000 !important;
+    border: 1px solid rgba(255,255,255,.6);
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.12);
+    font-weight: 500;
+}
+
+/* Tooltip Arrow */
+.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.bs-tooltip-bottom .tooltip-arrow::before {
+    border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.bs-tooltip-start .tooltip-arrow::before {
+    border-left-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.bs-tooltip-end .tooltip-arrow::before {
+    border-right-color: rgba(255, 255, 255, 0.15) !important;
+}
+.tooltip {
+    --bs-tooltip-max-width: 250px;
+}

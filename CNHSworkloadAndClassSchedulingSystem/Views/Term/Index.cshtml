@@ -1,0 +1,134 @@
+﻿@{
+    ViewData["Title"] = "Term";
+}
+
+@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.Term>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2 class="fw-bold">
+            Term Management
+        </h2>
+
+        <a asp-controller="Term"
+           asp-action="AddTerm"
+           class="btn btn-primary"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           title="Add a new Term to a School Year">
+
+            <i class="bi bi-plus-circle"></i>
+            Add Term
+
+        </a>
+
+    </div>
+
+    <table class="table table-bordered table-hover text-center">
+
+        <thead class="table-dark">
+
+            <tr>
+                <th width="80">#</th>
+                <th>School Year</th>
+                <th>Term Number</th>
+                <th>Instructional Days</th>
+                <th width="150">Actions</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @{
+                int count = 1;
+            }
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var term in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @count
+                        </td>
+
+                        <td>
+                            @term.SchoolYear.YearLabel
+                        </td>
+
+                        <td>
+                            Term @term.TermNumber
+                        </td>
+
+                        <td>
+                            @term.InstructionalDays
+                        </td>
+
+                        <td>
+
+                            <a asp-controller="Term"
+                               asp-action="EditTerm"
+                               asp-route-id="@term.TermID"
+                               class="btn btn-warning btn-sm"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Edit this Term">
+
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    count++;
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="5"
+                        class="text-muted py-4">
+
+                        No terms have been added yet.
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}

@@ -2,7 +2,7 @@
 
 namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 {
-    public class SYPreview : Controller
+    public class TimeSchedController : Controller
     {
         public IActionResult Index()
         {
