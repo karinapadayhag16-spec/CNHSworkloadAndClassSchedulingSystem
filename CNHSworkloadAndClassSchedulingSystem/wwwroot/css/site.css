@@ -142,34 +142,39 @@ body {
 .footer {
     background-color: #fff;
 }
-/*ToolTip Bubble*/
+/* Tooltip */
+
 .tooltip-inner {
-    background: rgba(255, 255, 255, 0.7) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    color: #000 !important;
-    border: 1px solid rgba(255,255,255,.6);
+    background: rgba(255, 60, 60, 0.92) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 120, 120, 0.9);
     border-radius: 14px;
-    box-shadow: 0 8px 30px rgba(0,0,0,.12);
-    font-weight: 500;
+    padding: 8px 12px;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,.35);
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.55), 0 0 20px rgba(255, 0, 0, 0.35), 0 8px 30px rgba(0,0,0,.2);
 }
 
-/* Tooltip Arrow */
+/* Arrow */
+
 .bs-tooltip-top .tooltip-arrow::before {
-    border-top-color: rgba(255, 255, 255, 0.15) !important;
+    border-top-color: rgba(255, 60, 60, 0.92) !important;
 }
 
 .bs-tooltip-bottom .tooltip-arrow::before {
-    border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+    border-bottom-color: rgba(255, 60, 60, 0.92) !important;
 }
 
 .bs-tooltip-start .tooltip-arrow::before {
-    border-left-color: rgba(255, 255, 255, 0.15) !important;
+    border-left-color: rgba(255, 60, 60, 0.92) !important;
 }
 
 .bs-tooltip-end .tooltip-arrow::before {
-    border-right-color: rgba(255, 255, 255, 0.15) !important;
+    border-right-color: rgba(255, 60, 60, 0.92) !important;
 }
+
 .tooltip {
-    --bs-tooltip-max-width: 250px;
+    --bs-tooltip-max-width: 260px;
 }

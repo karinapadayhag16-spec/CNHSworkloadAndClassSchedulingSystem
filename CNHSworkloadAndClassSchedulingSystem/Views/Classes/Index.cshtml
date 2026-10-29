@@ -1,56 +1,131 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@{
+﻿@{
     ViewData["Title"] = "Classes";
 }
 
-<div class="container-fluid mt-4">
-    <h3 class="fw-bold mb-4">
-        <i class="bi bi-people me-2"></i> Classes
-    </h3>
+@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection>
 
-    <div class="d-flex mb-3">
-        <button class="btn btn-primary fw-bold me-2">
-            <i class="bi bi-plus-circle me-2"></i> Add Class +
-        </button>
+<div class="container mt-4">
 
-        <div class="dropdown me-2">
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                Grade Lvl
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">7</a></li>
-                <li><a class="dropdown-item" href="#">8</a></li>
-                <li><a class="dropdown-item" href="#">9</a></li>
-                <li><a class="dropdown-item" href="#">10</a></li>
-                <li><a class="dropdown-item" href="#">11</a></li>
-                <li><a class="dropdown-item" href="#">12</a></li>
-            </ul>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <div class="dropdown">
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                Section
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Section A</a></li>
-                <li><a class="dropdown-item" href="#">Section B</a></li>
-            </ul>
-        </div>
+        <h2 class="fw-bold">
+            Class Management
+        </h2>
+
+        <a asp-controller="Classes"
+           asp-action="AddClass"
+           class="btn btn-primary"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           title="Add a new class section">
+
+            <i class="bi bi-plus-circle"></i>
+            Add Class
+
+        </a>
+
     </div>
 
-    <table class="table table-striped table-bordered align-middle">
+    <table class="table table-bordered table-hover text-center">
+
         <thead class="table-dark">
+
             <tr>
+                <th width="80">#</th>
                 <th>Department</th>
-                <th>Grade Lvl</th>
+                <th>Grade Level</th>
                 <th>Section</th>
                 <th>Adviser</th>
-                <th style="width:150px;">Action</th>
+                <th width="150">Actions</th>
             </tr>
+
         </thead>
+
+        <tbody>
+
+            @{
+                int count = 1;
+            }
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var classSection in Model)
+                {
+                    <tr>
+
+                        <td>@count</td>
+
+                        <td>
+                            @classSection
+                        </td>
+
+                        <td>-</td>
+
+                        <td>-</td>
+
+                        <td>-</td>
+
+                        <td>
+
+                            <a asp-controller="Classes"
+                               asp-action="EditClass"
+                               asp-route-id="@classSection.ClassSectionID"
+                               class="btn btn-warning btn-sm"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Edit this class section">
+
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    count++;
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="6"
+                        class="text-muted py-4">
+
+                        No classes have been added yet.
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
     </table>
+
 </div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}

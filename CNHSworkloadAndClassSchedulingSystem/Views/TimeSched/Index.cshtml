@@ -2,84 +2,134 @@
     ViewData["Title"] = "Time Schedule";
 }
 
-<div class="container-fluid mt-4">
-    <h3 class="fw-bold mb-4">
-        <i class="bi bi-clock me-2"></i> Time Schedule
-    </h3>
+@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.TimePeriod>
 
-    <div class="mb-4">
-        <button class="btn btn-primary fw-bold">
-            <i class="bi bi-plus-circle me-2"></i> Set Time +
-        </button>
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2 class="fw-bold">
+            Time Schedule Management
+        </h2>
+
+        <a asp-controller="TimeSched"
+           asp-action="AddSchedule"
+           class="btn btn-primary"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           title="Add a new Time Schedule">
+
+            <i class="bi bi-plus-circle"></i>
+            Add Time Schedule
+
+        </a>
+
     </div>
 
-    <!-- SHS -->
-    <h4 class="fw-bold mb-3">SHS</h4>
-    <div class="row g-4 mb-5">
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100 text-center">
-                <div class="card-body">
-                    <h5 class="fw-semibold"></h5>
-                    <div class="mt-3">
-                        <button class="btn btn-success btn-sm me-2">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100 text-center">
-                <div class="card-body">
-                    <h5 class="fw-semibold"></h5>
-                    <div class="mt-3">
-                        <button class="btn btn-success btn-sm me-2">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <table class="table table-bordered table-hover text-center">
 
-    <!-- JHS -->
-    <h4 class="fw-bold mb-3">JHS</h4>
-    <div class="row g-4">
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100 text-center">
-                <div class="card-body">
-                    <h5 class="fw-semibold"></h5>
-                    <div class="mt-3">
-                        <button class="btn btn-success btn-sm me-2">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100 text-center">
-                <div class="card-body">
-                    <h5 class="fw-semibold"></h5>
-                    <div class="mt-3">
-                        <button class="btn btn-success btn-sm me-2">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        <thead class="table-dark">
+
+            <tr>
+                <th width="80">#</th>
+                <th>Schedule Name</th>
+                <th width="250">Actions</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @{
+                int count = 1;
+            }
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var period in Model)
+                {
+                    <tr>
+
+                        <td>@count</td>
+
+                        <td>
+                            @(period.ToString())
+                        </td>
+
+                        <td>
+
+                            <a asp-controller="TimeSched"
+                               asp-action="ViewSchedule"
+                               asp-route-id="@period.TimePeriodId"
+                               class="btn btn-info btn-sm me-1"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="View this Time Schedule">
+
+                                <i class="bi bi-eye"></i>
+                                View
+
+                            </a>
+
+                            <a asp-controller="TimeSched"
+                               asp-action="EditSchedule"
+                               asp-route-id="@period.TimePeriodId"
+                               class="btn btn-warning btn-sm"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Edit this Time Schedule">
+
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    count++;
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="3"
+                        class="text-muted py-4">
+
+                        No time schedules have been added yet.
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
 </div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}
