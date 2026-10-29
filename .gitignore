@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/CNHSworkloadAndClassSchedulingSystem/Migrations/20261014144942_added instructional days in term model.cs
