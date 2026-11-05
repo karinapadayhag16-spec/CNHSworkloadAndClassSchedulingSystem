@@ -1,5 +1,7 @@
-﻿using CNHSworkloadAndClassSchedulingSystem.Data;
+﻿
+using CNHSworkloadAndClassSchedulingSystem.Data;
 using CNHSworkloadAndClassSchedulingSystem.Models.Domain;
+using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
 using CNHSworkloadAndClassSchedulingSystem.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +20,8 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
         public async Task<IActionResult> Index()
         {
             var schoolYears = await _context.SchoolYears
+                .OrderByDescending(s => s.SchoolYearId)
                 .ToListAsync();
-
-            schoolYears = schoolYears
-                .OrderByDescending(s =>
-                    int.Parse(s.YearLabel.Split('-')[0]))
-                .ToList();
 
             return View(schoolYears);
         }
@@ -34,7 +32,8 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             var viewModel = new AddSchoolYearViewModel
             {
                 StartYear = DateTime.Now.Year,
-                EndYear = DateTime.Now.Year + 1
+                EndYear = DateTime.Now.Year + 1,
+                Status = SchoolYearStatus.Setup
             };
 
             return View(viewModel);
@@ -68,22 +67,23 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 return View(viewModel);
             }
 
-            if (viewModel.IsCurrent)
+            // Only one school year can be Active
+            if (viewModel.Status == SchoolYearStatus.Active)
             {
                 var currentSchoolYears = await _context.SchoolYears
-                    .Where(s => s.IsCurrent)
+                    .Where(s => s.Status == SchoolYearStatus.Active)
                     .ToListAsync();
 
                 foreach (var sy in currentSchoolYears)
                 {
-                    sy.IsCurrent = false;
+                    sy.Status = SchoolYearStatus.Completed;
                 }
             }
 
             var schoolYear = new SchoolYear
             {
                 YearLabel = yearLabel,
-                IsCurrent = viewModel.IsCurrent
+                Status = viewModel.Status
             };
 
             _context.SchoolYears.Add(schoolYear);
@@ -104,13 +104,13 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 return NotFound();
             }
 
-            var years = schoolYear.YearLabel.Split('-');
+            var years = schoolYear.YearLabel!.Split('-');
 
             var viewModel = new AddSchoolYearViewModel
             {
                 StartYear = int.Parse(years[0]),
                 EndYear = int.Parse(years[1]),
-                IsCurrent = schoolYear.IsCurrent
+                Status = schoolYear.Status
             };
 
             ViewBag.SchoolYearId = schoolYear.SchoolYearId;
@@ -158,22 +158,23 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 return NotFound();
             }
 
-            if (viewModel.IsCurrent)
+            // Only one school year can be Active
+            if (viewModel.Status == SchoolYearStatus.Active)
             {
                 var currentSchoolYears = await _context.SchoolYears
                     .Where(s =>
-                        s.IsCurrent &&
+                        s.Status == SchoolYearStatus.Active &&
                         s.SchoolYearId != id)
                     .ToListAsync();
 
                 foreach (var sy in currentSchoolYears)
                 {
-                    sy.IsCurrent = false;
+                    sy.Status = SchoolYearStatus.Completed;
                 }
             }
 
             schoolYear.YearLabel = yearLabel;
-            schoolYear.IsCurrent = viewModel.IsCurrent;
+            schoolYear.Status = viewModel.Status;
 
             await _context.SaveChangesAsync();
 

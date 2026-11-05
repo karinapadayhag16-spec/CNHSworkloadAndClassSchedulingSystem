@@ -1,124 +1,90 @@
 ﻿@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.AddSchoolYearViewModel
-
 @{
     ViewData["Title"] = "Add School Year";
 }
-
 <div class="container mt-4">
-
     <div class="row justify-content-center">
-
         <div class="col-lg-8">
-
             <div class="card shadow-lg border-0">
-
                 <div class="card-header bg-primary">
                     <h3 class="mb-0 fw-bold text-white">
                         <i class="bi bi-plus-circle"></i>
                         Add School Year
                     </h3>
                 </div>
-
                 <div class="card-body p-4">
-
-                    <form asp-action="AddSchoolYear" method="post">
-
+                    <form asp-action="AddSchoolYear" method="post" id="addSchoolYearForm">
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger mb-3">
                         </div>
-
                         <div class="mb-3">
-
                             <label asp-for="StartYear" class="form-label">
                                 Start Year
                             </label>
-
                             <input asp-for="StartYear"
                                    class="form-control"
                                    style="width:70%;"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="right"
                                    title="Enter the starting year of the School Year" />
-
                             <span asp-validation-for="StartYear"
                                   class="text-danger">
                             </span>
-
                         </div>
-
                         <div class="mb-3">
-
                             <label asp-for="EndYear" class="form-label">
                                 End Year
                             </label>
-
                             <input asp-for="EndYear"
                                    class="form-control"
                                    style="width:70%;"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="right"
                                    title="Enter the ending year of the School Year" />
-
                             <span asp-validation-for="EndYear"
                                   class="text-danger">
                             </span>
-
                         </div>
-
                         <div class="form-check mb-4">
-
-                            <input asp-for="IsCurrent"
+                            <input type="hidden"
+                                   name="Status"
+                                   id="schoolYearStatus"
+                                   value="0" />
+                            <input type="checkbox"
                                    class="form-check-input"
                                    id="currentSchoolYear"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="right"
                                    title="Set this School Year as the active School Year" />
-
-                            <label asp-for="IsCurrent"
-                                   class="form-check-label">
+                            <label class="form-check-label"
+                                   for="currentSchoolYear">
                                 Current School Year
                             </label>
-
                         </div>
-
                         <div class="d-flex gap-2">
-
                             <button type="submit"
                                     class="btn btn-success"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
                                     title="Save this new School Year">
-
                                 <i class="bi bi-save"></i>
                                 Save
-
                             </button>
-
                             <a asp-action="Index"
                                class="btn btn-secondary"
                                data-bs-toggle="tooltip"
                                data-bs-placement="top"
                                title="Return to the School Year list">
-
                                 <i class="bi bi-arrow-left-circle"></i>
                                 Back
-
                             </a>
-
                         </div>
-
                     </form>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
-
 <!-- Warning Modal -->
 <div class="modal fade"
      id="currentSchoolYearModal"
@@ -161,8 +127,8 @@
                     </p>
 
                     <p class="mb-0">
-                        This action will automatically remove the Current status
-                        from any existing School Year that is currently active.
+                        This action will automatically change the status
+                        of any existing Active School Year to Completed.
                     </p>
 
                 </div>
@@ -224,7 +190,14 @@
             const confirmButton =
                 document.getElementById("confirmCurrentSchoolYear");
 
-            if (!checkbox || !modalElement || !confirmButton)
+            const statusInput =
+                document.getElementById("schoolYearStatus");
+
+            const form =
+                document.getElementById("addSchoolYearForm");
+
+            if (!checkbox || !modalElement || !confirmButton ||
+                !statusInput || !form)
                 return;
 
             const modal =
@@ -251,6 +224,21 @@
                 checkbox.checked = true;
 
                 modal.hide();
+
+            });
+
+            // Set SchoolYearStatus before submitting
+            form.addEventListener("submit", function() {
+
+                if (checkbox.checked) {
+
+                    statusInput.value = "1"; // Active
+
+                } else {
+
+                    statusInput.value = "0"; // Setup
+
+                }
 
             });
 

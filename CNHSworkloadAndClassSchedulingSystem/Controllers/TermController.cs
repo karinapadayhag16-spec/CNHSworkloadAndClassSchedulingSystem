@@ -1,5 +1,7 @@
-﻿using CNHSworkloadAndClassSchedulingSystem.Data;
+﻿
+using CNHSworkloadAndClassSchedulingSystem.Data;
 using CNHSworkloadAndClassSchedulingSystem.Models.Domain;
+using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
 using CNHSworkloadAndClassSchedulingSystem.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +33,8 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
         public async Task<IActionResult> AddTerm()
         {
             var currentSchoolYear = await _context.SchoolYears
-                .FirstOrDefaultAsync(sy => sy.IsCurrent);
+                .FirstOrDefaultAsync(sy =>
+                    sy.Status == SchoolYearStatus.Active);
 
             if (currentSchoolYear == null)
             {
@@ -58,10 +61,12 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddTerm(AddTermViewModel viewModel)
+        public async Task<IActionResult> AddTerm(
+            AddTermViewModel viewModel)
         {
             var currentSchoolYear = await _context.SchoolYears
-                .FirstOrDefaultAsync(sy => sy.IsCurrent);
+                .FirstOrDefaultAsync(sy =>
+                    sy.Status == SchoolYearStatus.Active);
 
             if (currentSchoolYear == null)
             {
@@ -130,11 +135,12 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditTerm(
-    int id,
-    AddTermViewModel viewModel)
+            int id,
+            AddTermViewModel viewModel)
         {
             var term = await _context.Terms
                 .FirstOrDefaultAsync(t => t.TermID == id);
@@ -146,6 +152,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             if (!ModelState.IsValid)
             {
+                ViewBag.TermID = id;
                 return View(viewModel);
             }
 

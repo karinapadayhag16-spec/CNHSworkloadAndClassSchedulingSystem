@@ -18,8 +18,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Models.Domain
 
         [ForeignKey(nameof(SchoolYearID))]
         public SchoolYear SchoolYear { get; set; } = null!;
-
-        public ICollection<TimePeriod> TimePeriods { get; set; }
-            = new List<TimePeriod>();
+        public ICollection<ClassSectionSchedule> ClassSectionSchedules
+        { get; set; } = new List<ClassSectionSchedule>();
     }
 }

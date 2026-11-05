@@ -1,4 +1,6 @@
-﻿@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.AddSchoolYearViewModel
+﻿
+@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.AddSchoolYearViewModel
+@using CNHSworkloadAndClassSchedulingSystem.Models.Enums
 
 @{
     ViewData["Title"] = "Edit School Year";
@@ -23,7 +25,8 @@
 
                     <form asp-action="EditSchoolYear"
                           asp-route-id="@ViewBag.SchoolYearId"
-                          method="post">
+                          method="post"
+                          id="editSchoolYearForm">
 
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger mb-3">
@@ -69,15 +72,21 @@
 
                         <div class="form-check mb-4">
 
-                            <input asp-for="IsCurrent"
+                            <input type="hidden"
+                                   name="Status"
+                                   id="schoolYearStatus"
+                                   value="@((int)Model.Status)" />
+
+                            <input type="checkbox"
                                    class="form-check-input"
                                    id="currentSchoolYear"
+                                   checked="@(Model.Status == SchoolYearStatus.Active)"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="right"
                                    title="Set this School Year as the active School Year" />
 
-                            <label asp-for="IsCurrent"
-                                   class="form-check-label">
+                            <label class="form-check-label"
+                                   for="currentSchoolYear">
                                 Current School Year
                             </label>
 
@@ -136,8 +145,10 @@
 
                 <h5 class="modal-title"
                     id="currentSchoolYearModalLabel">
+
                     <i class="bi bi-exclamation-triangle-fill"></i>
                     Warning
+
                 </h5>
 
                 <button type="button"
@@ -161,8 +172,8 @@
                     </p>
 
                     <p class="mb-0">
-                        This action will automatically remove the Current status
-                        from any other School Year that is currently active.
+                        This action will automatically change the status
+                        of any existing Active School Year to Completed.
                     </p>
 
                 </div>
@@ -224,7 +235,14 @@
             const confirmButton =
                 document.getElementById("confirmCurrentSchoolYear");
 
-            if (!checkbox || !modalElement || !confirmButton)
+            const statusInput =
+                document.getElementById("schoolYearStatus");
+
+            const form =
+                document.getElementById("editSchoolYearForm");
+
+            if (!checkbox || !modalElement ||
+                !confirmButton || !statusInput || !form)
                 return;
 
             const modal =
@@ -242,6 +260,15 @@
 
                 }
 
+                else if (!checkbox.checked) {
+
+                    // If unchecked, set status to Setup
+                    statusInput.value = "0";
+
+                    confirmed = false;
+
+                }
+
             });
 
             confirmButton.addEventListener("click", function() {
@@ -250,7 +277,24 @@
 
                 checkbox.checked = true;
 
+                statusInput.value = "1"; // Active
+
                 modal.hide();
+
+            });
+
+            // Set status before submitting
+            form.addEventListener("submit", function() {
+
+                if (checkbox.checked) {
+
+                    statusInput.value = "1"; // Active
+
+                } else {
+
+                    statusInput.value = "0"; // Setup
+
+                }
 
             });
 

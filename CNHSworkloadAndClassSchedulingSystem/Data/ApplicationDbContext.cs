@@ -14,9 +14,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
         // DBSets for application entities
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<SchoolYear> SchoolYears { get; set; }
-
         public DbSet<Term> Terms { get; set; }
-
+        public DbSet<TimeSchedule> TimeSchedules { get; set; }
+        public DbSet<TimePeriod> TimePeriods { get; set; }
+        public DbSet<ClassSectionSchedule> ClassSectionSchedules { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,13 +38,12 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
                 .IsUnique();
 
             modelBuilder.Entity<TimePeriod>()
-                .HasIndex(t => new
-                {
-                    t.TermID,
-                    t.Department,
-                    t.PeriodNumber
-                })
-                .IsUnique();
+                 .HasIndex(t => new
+                 {
+                     t.TimeScheduleId,
+                     t.PeriodNumber
+                 })
+                 .IsUnique();
 
             modelBuilder.Entity<TeacherExpertise>()
                 .HasOne(te => te.Teacher)
@@ -123,6 +124,59 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
                 .WithMany()
                 .HasForeignKey(c => c.AdviserID)
                 .OnDelete(DeleteBehavior.NoAction);
+            // TimeSchedule - TimePeriod
+            modelBuilder.Entity<TimeSchedule>()
+                .HasMany(ts => ts.TimePeriods)
+                .WithOne(tp => tp.TimeSchedule)
+                .HasForeignKey(tp => tp.TimeScheduleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            // TimeSchedule - Previous Version
+            modelBuilder.Entity<TimeSchedule>()
+                .HasOne(ts => ts.BasedOnTimeSchedule)
+                .WithMany()
+                .HasForeignKey(ts => ts.BasedOnTimeScheduleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            // ClassSectionSchedule - ClassSection
+            modelBuilder.Entity<ClassSectionSchedule>()
+                .HasOne(css => css.ClassSection)
+                .WithMany(cs => cs.ScheduleAssignments)
+                .HasForeignKey(css => css.ClassSectionID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            // ClassSectionSchedule - TimeSchedule
+            modelBuilder.Entity<ClassSectionSchedule>()
+                .HasOne(css => css.TimeSchedule)
+                .WithMany(ts => ts.ClassSectionSchedules)
+                .HasForeignKey(css => css.TimeScheduleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            // ClassSectionSchedule - Term
+            modelBuilder.Entity<ClassSectionSchedule>()
+                .HasOne(css => css.Term)
+                .WithMany(t => t.ClassSectionSchedules)
+                .HasForeignKey(css => css.TermID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            // Prevent duplicate schedule assignments
+            modelBuilder.Entity<ClassSectionSchedule>()
+                .HasIndex(css => new
+                {
+                    css.ClassSectionID,
+                    css.TermID
+                })
+                .IsUnique();
+            modelBuilder.Entity<ClassSection>()
+                .HasOne(cs => cs.PreviousClassSection)
+                .WithMany()
+                .HasForeignKey(cs => cs.PreviousClassSectionID)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

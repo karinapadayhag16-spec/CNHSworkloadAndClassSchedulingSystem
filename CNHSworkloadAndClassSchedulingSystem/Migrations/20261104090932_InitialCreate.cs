@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CNHSworkloadAndClassSchedulingSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class newmigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,17 +54,17 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SchoolYear",
+                name: "SchoolYears",
                 columns: table => new
                 {
                     SchoolYearId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     YearLabel = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    IsCurrent = table.Column<bool>(type: "bit", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SchoolYear", x => x.SchoolYearId);
+                    table.PrimaryKey("PK_SchoolYears", x => x.SchoolYearId);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,6 +79,31 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subject", x => x.SubjectID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TimeSchedules",
+                columns: table => new
+                {
+                    TimeScheduleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ScheduleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VersionNumber = table.Column<int>(type: "int", nullable: false),
+                    BasedOnTimeScheduleId = table.Column<int>(type: "int", nullable: true),
+                    IsArchived = table.Column<bool>(type: "bit", nullable: false),
+                    ChangeReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeSchedules", x => x.TimeScheduleId);
+                    table.ForeignKey(
+                        name: "FK_TimeSchedules_TimeSchedules_BasedOnTimeScheduleId",
+                        column: x => x.BasedOnTimeScheduleId,
+                        principalTable: "TimeSchedules",
+                        principalColumn: "TimeScheduleId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,30 +227,54 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 {
                     table.PrimaryKey("PK_Teacher", x => x.TeacherID);
                     table.ForeignKey(
-                        name: "FK_Teacher_SchoolYear_SchoolYearID",
+                        name: "FK_Teacher_SchoolYears_SchoolYearID",
                         column: x => x.SchoolYearID,
-                        principalTable: "SchoolYear",
+                        principalTable: "SchoolYears",
                         principalColumn: "SchoolYearId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Term",
+                name: "Terms",
                 columns: table => new
                 {
                     TermID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TermNumber = table.Column<int>(type: "int", nullable: false),
-                    SchoolYearID = table.Column<int>(type: "int", nullable: false)
+                    SchoolYearID = table.Column<int>(type: "int", nullable: false),
+                    InstructionalDays = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Term", x => x.TermID);
+                    table.PrimaryKey("PK_Terms", x => x.TermID);
                     table.ForeignKey(
-                        name: "FK_Term_SchoolYear_SchoolYearID",
+                        name: "FK_Terms_SchoolYears_SchoolYearID",
                         column: x => x.SchoolYearID,
-                        principalTable: "SchoolYear",
+                        principalTable: "SchoolYears",
                         principalColumn: "SchoolYearId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TimePeriods",
+                columns: table => new
+                {
+                    TimePeriodId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PeriodNumber = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    IsBreak = table.Column<bool>(type: "bit", nullable: false),
+                    TimeScheduleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimePeriods", x => x.TimePeriodId);
+                    table.ForeignKey(
+                        name: "FK_TimePeriods_TimeSchedules_TimeScheduleId",
+                        column: x => x.TimeScheduleId,
+                        principalTable: "TimeSchedules",
+                        principalColumn: "TimeScheduleId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -239,23 +288,29 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                     GradeLevel = table.Column<int>(type: "int", nullable: false),
                     SectionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AdviserID = table.Column<int>(type: "int", nullable: false),
-                    SchoolYearID = table.Column<int>(type: "int", nullable: false)
+                    SchoolYearID = table.Column<int>(type: "int", nullable: false),
+                    PreviousClassSectionID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ClassSection", x => x.ClassSectionID);
                     table.ForeignKey(
-                        name: "FK_ClassSection_SchoolYear_SchoolYearID",
+                        name: "FK_ClassSection_ClassSection_PreviousClassSectionID",
+                        column: x => x.PreviousClassSectionID,
+                        principalTable: "ClassSection",
+                        principalColumn: "ClassSectionID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ClassSection_SchoolYears_SchoolYearID",
                         column: x => x.SchoolYearID,
-                        principalTable: "SchoolYear",
+                        principalTable: "SchoolYears",
                         principalColumn: "SchoolYearId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ClassSection_Teacher_AdviserID",
                         column: x => x.AdviserID,
                         principalTable: "Teacher",
-                        principalColumn: "TeacherID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "TeacherID");
                 });
 
             migrationBuilder.CreateTable(
@@ -285,27 +340,36 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TimePeriod",
+                name: "ClassSectionSchedules",
                 columns: table => new
                 {
-                    TimePeriodId = table.Column<int>(type: "int", nullable: false)
+                    ClassSectionScheduleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PeriodNumber = table.Column<int>(type: "int", nullable: false),
-                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Department = table.Column<int>(type: "int", nullable: false),
-                    TermID = table.Column<int>(type: "int", nullable: false),
-                    IsBreak = table.Column<bool>(type: "bit", nullable: false)
+                    ClassSectionID = table.Column<int>(type: "int", nullable: false),
+                    TimeScheduleId = table.Column<int>(type: "int", nullable: false),
+                    TermID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TimePeriod", x => x.TimePeriodId);
+                    table.PrimaryKey("PK_ClassSectionSchedules", x => x.ClassSectionScheduleId);
                     table.ForeignKey(
-                        name: "FK_TimePeriod_Term_TermID",
+                        name: "FK_ClassSectionSchedules_ClassSection_ClassSectionID",
+                        column: x => x.ClassSectionID,
+                        principalTable: "ClassSection",
+                        principalColumn: "ClassSectionID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ClassSectionSchedules_Terms_TermID",
                         column: x => x.TermID,
-                        principalTable: "Term",
+                        principalTable: "Terms",
                         principalColumn: "TermID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ClassSectionSchedules_TimeSchedules_TimeScheduleId",
+                        column: x => x.TimeScheduleId,
+                        principalTable: "TimeSchedules",
+                        principalColumn: "TimeScheduleId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -335,9 +399,9 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                         principalColumn: "SubjectID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_SubjectOffering_Term_TermID",
+                        name: "FK_SubjectOffering_Terms_TermID",
                         column: x => x.TermID,
-                        principalTable: "Term",
+                        principalTable: "Terms",
                         principalColumn: "TermID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -369,9 +433,9 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                         principalColumn: "TeacherID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Schedule_TimePeriod_TimePeriodID",
+                        name: "FK_Schedule_TimePeriods_TimePeriodID",
                         column: x => x.TimePeriodID,
-                        principalTable: "TimePeriod",
+                        principalTable: "TimePeriods",
                         principalColumn: "TimePeriodId",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -421,9 +485,30 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 column: "AdviserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClassSection_PreviousClassSectionID",
+                table: "ClassSection",
+                column: "PreviousClassSectionID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClassSection_SchoolYearID",
                 table: "ClassSection",
                 column: "SchoolYearID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassSectionSchedules_ClassSectionID_TermID",
+                table: "ClassSectionSchedules",
+                columns: new[] { "ClassSectionID", "TermID" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassSectionSchedules_TermID",
+                table: "ClassSectionSchedules",
+                column: "TermID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassSectionSchedules_TimeScheduleId",
+                table: "ClassSectionSchedules",
+                column: "TimeScheduleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schedule_SubjectOfferingID",
@@ -442,8 +527,8 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 column: "TimePeriodID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SchoolYear_YearLabel",
-                table: "SchoolYear",
+                name: "IX_SchoolYears_YearLabel",
+                table: "SchoolYears",
                 column: "YearLabel",
                 unique: true,
                 filter: "[YearLabel] IS NOT NULL");
@@ -481,16 +566,21 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Term_SchoolYearID_TermNumber",
-                table: "Term",
+                name: "IX_Terms_SchoolYearID_TermNumber",
+                table: "Terms",
                 columns: new[] { "SchoolYearID", "TermNumber" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_TimePeriod_TermID_Department_PeriodNumber",
-                table: "TimePeriod",
-                columns: new[] { "TermID", "Department", "PeriodNumber" },
+                name: "IX_TimePeriods_TimeScheduleId_PeriodNumber",
+                table: "TimePeriods",
+                columns: new[] { "TimeScheduleId", "PeriodNumber" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TimeSchedules_BasedOnTimeScheduleId",
+                table: "TimeSchedules",
+                column: "BasedOnTimeScheduleId");
         }
 
         /// <inheritdoc />
@@ -512,6 +602,9 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ClassSectionSchedules");
+
+            migrationBuilder.DropTable(
                 name: "Schedule");
 
             migrationBuilder.DropTable(
@@ -527,7 +620,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 name: "SubjectOffering");
 
             migrationBuilder.DropTable(
-                name: "TimePeriod");
+                name: "TimePeriods");
 
             migrationBuilder.DropTable(
                 name: "ClassSection");
@@ -536,13 +629,16 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                 name: "Subject");
 
             migrationBuilder.DropTable(
-                name: "Term");
+                name: "Terms");
+
+            migrationBuilder.DropTable(
+                name: "TimeSchedules");
 
             migrationBuilder.DropTable(
                 name: "Teacher");
 
             migrationBuilder.DropTable(
-                name: "SchoolYear");
+                name: "SchoolYears");
         }
     }
 }

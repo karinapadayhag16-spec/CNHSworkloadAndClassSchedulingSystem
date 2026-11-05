@@ -1,4 +1,4 @@
-﻿using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
+﻿using System;
 
 namespace CNHSworkloadAndClassSchedulingSystem.Models.Domain
 {
@@ -8,9 +8,9 @@ namespace CNHSworkloadAndClassSchedulingSystem.Models.Domain
         public int PeriodNumber { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
-        public Department Department { get; set; }
-        public int TermID { get; set; }
-        public Term Term { get; set; }
         public bool IsBreak { get; set; }
+        // Foreign key to TimeSchedule
+        public int TimeScheduleId { get; set; }
+        public TimeSchedule TimeSchedule { get; set; } = null!;
     }
 }

@@ -1,8 +1,10 @@
-﻿@{
+﻿
+@using CNHSworkloadAndClassSchedulingSystem.Models.Enums
+@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear>
+
+@{
     ViewData["Title"] = "School Year";
 }
-
-@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.SchoolYear>
 
 <div class="container mt-4">
 
@@ -56,17 +58,31 @@
                         <td>@schoolYear.YearLabel</td>
 
                         <td>
-                            @if (schoolYear.IsCurrent)
+                            @switch (schoolYear.Status)
                             {
-                                <span class="badge bg-success">
-                                    Current
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">
-                                    Inactive
-                                </span>
+                                case SchoolYearStatus.Setup:
+                                    <span class="badge bg-secondary">
+                                        Setup
+                                    </span>
+                                    break;
+
+                                case SchoolYearStatus.Active:
+                                    <span class="badge bg-success">
+                                        Current
+                                    </span>
+                                    break;
+
+                                case SchoolYearStatus.Completed:
+                                    <span class="badge bg-primary">
+                                        Completed
+                                    </span>
+                                    break;
+
+                                default:
+                                    <span class="badge bg-dark">
+                                        Unknown
+                                    </span>
+                                    break;
                             }
                         </td>
 

@@ -1,7 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CNHSworkloadAndClassSchedulingSystem.Data;
+using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
 
 namespace CNHSworkloadAndClassSchedulingSystem.ViewComponents
 {
@@ -18,7 +18,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var currentSchoolYear = await _context.SchoolYears
-                .Where(sy => sy.IsCurrent)
+                .Where(sy => sy.Status == SchoolYearStatus.Active)
                 .Select(sy => sy.YearLabel)
                 .FirstOrDefaultAsync();
 

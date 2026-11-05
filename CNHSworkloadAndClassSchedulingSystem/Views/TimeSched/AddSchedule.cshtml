@@ -1,251 +1,367 @@
-﻿@{
+﻿
+@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.TimeScheduleViewModel
+
+@{
     ViewData["Title"] = "Add Schedule";
 }
 
 <div class="container mt-4">
-
     <div class="row justify-content-center">
-
         <div class="col-lg-11">
-
             <div class="card shadow-lg border-0">
 
                 <div class="card-header bg-primary">
-
                     <h3 class="mb-0 fw-bold text-white">
-
                         <i class="bi bi-calendar-plus"></i>
                         Add Schedule
-
                     </h3>
-
                 </div>
 
                 <div class="card-body p-4">
 
-                    <div class="mb-4">
+                    <form asp-controller="TimeSched"
+                          asp-action="AddSchedule"
+                          method="post">
 
-                        <label class="form-label fw-bold">
-                            Schedule Name
-                        </label>
+                        @Html.AntiForgeryToken()
 
-                        <input type="text"
-                               class="form-control"
-                               style="max-width:500px;"
-                               placeholder="e.g. Regular Schedule"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="right"
-                               title="Enter the schedule name" />
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3"></div>
 
-                    </div>
+                        <!-- Schedule Name -->
+                        <div class="mb-4">
+                            <label asp-for="ScheduleName"
+                                   class="form-label fw-bold">
+                                Schedule Name
+                            </label>
 
-                    <div id="scheduleRows">
+                            <input asp-for="ScheduleName"
+                                   class="form-control"
+                                   style="max-width:500px;"
+                                   placeholder="e.g. Regular Schedule"
+                                   data-bs-toggle="tooltip"
+                                   title="Enter the schedule name" />
 
-                        <div class="row align-items-end mb-4 schedule-row">
+                            <span asp-validation-for="ScheduleName"
+                                  class="text-danger"></span>
+                        </div>
 
-                            <div class="col-md-1 text-center">
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label asp-for="Description"
+                                   class="form-label fw-bold">
+                                Description
+                            </label>
 
-                                <label class="form-label d-block">&nbsp;</label>
+                            <textarea asp-for="Description"
+                                      class="form-control"
+                                      style="max-width:500px;"
+                                      rows="2"
+                                      placeholder="Optional schedule description"></textarea>
 
-                                <span class="fw-bold fs-5">
-                                    1
-                                </span>
+                            <span asp-validation-for="Description"
+                                  class="text-danger"></span>
+                        </div>
 
-                            </div>
+                        <hr />
 
-                            <div class="col-md-5">
+                        <h5 class="fw-bold mb-3">Time Periods</h5>
 
-                                <label class="form-label fw-semibold">
-                                    Start Time
-                                </label>
+                        <div id="scheduleRows">
 
-                                <div class="d-flex gap-2">
+                            <div class="schedule-row border rounded p-3 mb-3"
+                                 data-index="0">
 
-                                    <select class="form-select start-hour"
-                                            data-bs-toggle="tooltip"
-                                            title="Select start hour">
+                                <input type="hidden"
+                                       name="TimePeriods[0].PeriodNumber"
+                                       class="period-number"
+                                       value="1" />
 
-                                        @for (int i = 1; i <= 12; i++)
-                                        {
-                                            if (i == 8)
-                                            {
-                                                <option selected>@i.ToString("00")</option>
-                                            }
-                                            else
-                                            {
-                                                <option>@i.ToString("00")</option>
-                                            }
-                                        }
+                                <input type="hidden"
+                                       name="TimePeriods[0].StartTime"
+                                       class="start-time-value"
+                                       value="08:00:00" />
 
-                                    </select>
+                                <input type="hidden"
+                                       name="TimePeriods[0].EndTime"
+                                       class="end-time-value"
+                                       value="09:00:00" />
 
-                                    <select class="form-select start-minute"
-                                            data-bs-toggle="tooltip"
-                                            title="Select start minute">
+                                <div class="row align-items-end">
 
-                                        @for (int i = 0; i < 60; i += 5)
-                                        {
-                                            <option>@i.ToString("00")</option>
-                                        }
+                                    <div class="col-md-1 text-center">
+                                        <label class="form-label d-block">
+                                            Period
+                                        </label>
 
-                                    </select>
+                                        <span class="fw-bold fs-5 period-label">
+                                            1
+                                        </span>
+                                    </div>
 
-                                    <select class="form-select start-period"
-                                            data-bs-toggle="tooltip"
-                                            title="Select start period">
+                                    <div class="col-md-5">
+                                        <label class="form-label fw-semibold">
+                                            Start Time
+                                        </label>
 
-                                        <option selected>AM</option>
-                                        <option>PM</option>
+                                        <div class="d-flex gap-2">
+                                            <select class="form-select start-hour">
+                                                @for (int i = 1; i <= 12; i++)
+                                                {
+                                                    if (i == 8)
+                                                    {
+                                                        <option selected>@i.ToString("00")</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option>@i.ToString("00")</option>
+                                                    }
+                                                }
+                                            </select>
 
-                                    </select>
+                                            <select class="form-select start-minute">
+                                                @for (int i = 0; i < 60; i += 5)
+                                                {
+                                                    <option>@i.ToString("00")</option>
+                                                }
+                                            </select>
+
+                                            <select class="form-select start-period">
+                                                <option selected>AM</option>
+                                                <option>PM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <label class="form-label fw-semibold">
+                                            End Time
+                                        </label>
+
+                                        <div class="d-flex gap-2">
+                                            <select class="form-select end-hour">
+                                                @for (int i = 1; i <= 12; i++)
+                                                {
+                                                    if (i == 9)
+                                                    {
+                                                        <option selected>@i.ToString("00")</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option>@i.ToString("00")</option>
+                                                    }
+                                                }
+                                            </select>
+
+                                            <select class="form-select end-minute">
+                                                @for (int i = 0; i < 60; i += 5)
+                                                {
+                                                    <option>@i.ToString("00")</option>
+                                                }
+                                            </select>
+
+                                            <select class="form-select end-period">
+                                                <option selected>AM</option>
+                                                <option>PM</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                 </div>
 
-                            </div>
+                                <div class="mt-3">
+                                    <div class="form-check">
 
-                            <div class="col-md-5">
+                                        <input type="checkbox"
+                                               name="TimePeriods[0].IsBreak"
+                                               value="true"
+                                               class="form-check-input is-break" />
 
-                                <label class="form-label fw-semibold">
-                                    End Time
-                                </label>
+                                        <input type="hidden"
+                                               name="TimePeriods[0].IsBreak"
+                                               value="false" />
 
-                                <div class="d-flex gap-2">
+                                        <label class="form-check-label fw-semibold">
+                                            Break Period (e.g. Recess or Lunch)
+                                        </label>
 
-                                    <select class="form-select end-hour"
-                                            data-bs-toggle="tooltip"
-                                            title="Select end hour">
-
-                                        @for (int i = 1; i <= 12; i++)
-                                        {
-                                            if (i == 9)
-                                            {
-                                                <option selected>@i.ToString("00")</option>
-                                            }
-                                            else
-                                            {
-                                                <option>@i.ToString("00")</option>
-                                            }
-                                        }
-
-                                    </select>
-
-                                    <select class="form-select end-minute"
-                                            data-bs-toggle="tooltip"
-                                            title="Select end minute">
-
-                                        @for (int i = 0; i < 60; i += 5)
-                                        {
-                                            <option>@i.ToString("00")</option>
-                                        }
-
-                                    </select>
-
-                                    <select class="form-select end-period"
-                                            data-bs-toggle="tooltip"
-                                            title="Select end period">
-
-                                        <option selected>AM</option>
-                                        <option>PM</option>
-
-                                    </select>
-
+                                    </div>
                                 </div>
 
                             </div>
 
                         </div>
 
-                    </div>
+                        <span asp-validation-for="TimePeriods"
+                              class="text-danger"></span>
 
-                    <div class="text-end mb-3">
+                        <!-- Add Period -->
+                        <div class="text-end mb-3">
+                            <button type="button"
+                                    id="addRow"
+                                    class="btn btn-primary"
+                                    data-bs-toggle="tooltip"
+                                    title="Add another schedule period">
 
-                        <button type="button"
-                                id="addRow"
-                                class="btn btn-primary"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="left"
-                                title="Add another schedule period">
+                                <i class="bi bi-plus-circle"></i>
+                                Add Period
+                            </button>
+                        </div>
 
-                            <i class="bi bi-plus-circle"></i>
-                            Add Period
+                        <hr />
 
-                        </button>
+                        <!-- Buttons -->
+                        <div class="text-end">
 
-                    </div>
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    data-bs-toggle="tooltip"
+                                    title="Save this schedule">
 
-                    <hr />
+                                <i class="bi bi-save"></i>
+                                Save Schedule
+                            </button>
 
-                    <div class="text-end">
+                            <a asp-controller="TimeSched"
+                               asp-action="Index"
+                               class="btn btn-secondary">
 
-                        <button type="submit"
-                                class="btn btn-success"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="left"
-                                title="Save this schedule">
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back
+                            </a>
 
-                            <i class="bi bi-save"></i>
-                            Save Schedule
+                        </div>
 
-                        </button>
-
-                        <a asp-controller="TimeSched"
-                           asp-action="Index"
-                           class="btn btn-secondary"
-                           data-bs-toggle="tooltip"
-                           data-bs-placement="top"
-                           title="Return to the Term list">
-
-                            <i class="bi bi-arrow-left-circle"></i>
-                            Back
-                        </a>
-
-                    </div>
+                    </form>
 
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
 
 @section Scripts {
 
+    <partial name="_ValidationScriptsPartial" />
+
     <script>
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
             initializeTooltips();
+
+            document.querySelectorAll(".schedule-row")
+                .forEach(updateRowTimes);
 
         });
 
         function initializeTooltips() {
 
-            var tooltipTriggerList =
-                [].slice.call(
-                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                );
+            document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                .forEach(function (element) {
 
-            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+                    if (!bootstrap.Tooltip.getInstance(element)) {
+                        new bootstrap.Tooltip(element);
+                    }
 
-                if (!bootstrap.Tooltip.getInstance(tooltipTriggerEl)) {
-
-                    new bootstrap.Tooltip(tooltipTriggerEl);
-
-                }
-
-            });
+                });
 
         }
 
-        document.getElementById("addRow")
-            .addEventListener("click", function() {
+        // Convert 12-hour time to 24-hour TimeSpan format
+        function convertTo24Hour(hour, minute, period) {
 
-                bootstrap.Tooltip
-                    .getInstance(this)
-                    ?.hide();
+            let h = parseInt(hour);
+
+            if (period === "AM" && h === 12) {
+                h = 0;
+            }
+            else if (period === "PM" && h !== 12) {
+                h += 12;
+            }
+
+            return String(h).padStart(2, "0") + ":" +
+                   String(minute).padStart(2, "0") + ":00";
+        }
+
+        function updateRowTimes(row) {
+
+            const startTime = convertTo24Hour(
+                row.querySelector(".start-hour").value,
+                row.querySelector(".start-minute").value,
+                row.querySelector(".start-period").value
+            );
+
+            const endTime = convertTo24Hour(
+                row.querySelector(".end-hour").value,
+                row.querySelector(".end-minute").value,
+                row.querySelector(".end-period").value
+            );
+
+            row.querySelector(".start-time-value").value = startTime;
+            row.querySelector(".end-time-value").value = endTime;
+
+        }
+
+        // Update hidden values whenever an administrator changes time
+        document.addEventListener("change", function (event) {
+
+            if (event.target.closest(".schedule-row")) {
+
+                const row = event.target.closest(".schedule-row");
+
+                updateRowTimes(row);
+
+            }
+
+        });
+
+        // Convert minutes since midnight into 12-hour display values
+        function setTime(selectors, totalMinutes) {
+
+            totalMinutes = totalMinutes % 1440;
+
+            const hour24 = Math.floor(totalMinutes / 60);
+            const minute = totalMinutes % 60;
+
+            let period = hour24 >= 12 ? "PM" : "AM";
+
+            let hour12 = hour24 % 12;
+
+            if (hour12 === 0) {
+                hour12 = 12;
+            }
+
+            selectors.hour.value =
+                String(hour12).padStart(2, "0");
+
+            selectors.minute.value =
+                String(minute).padStart(2, "0");
+
+            selectors.period.value = period;
+
+        }
+
+        function getMinutes(hour, minute, period) {
+
+            let h = parseInt(hour);
+
+            if (period === "AM" && h === 12) {
+                h = 0;
+            }
+            else if (period === "PM" && h !== 12) {
+                h += 12;
+            }
+
+            return (h * 60) + parseInt(minute);
+
+        }
+
+        // Add a new period
+        document.getElementById("addRow")
+            .addEventListener("click", function () {
+
+                bootstrap.Tooltip.getInstance(this)?.hide();
 
                 const container =
                     document.getElementById("scheduleRows");
@@ -253,181 +369,183 @@
                 const rows =
                     container.querySelectorAll(".schedule-row");
 
-                const lastRow =
-                    rows[rows.length - 1];
+                const lastRow = rows[rows.length - 1];
 
-                const rowNumber =
-                    rows.length + 1;
+                const index = rows.length;
 
-                const startHour =
-                    lastRow.querySelector(".end-hour").value;
+                const lastEnd = getMinutes(
+                    lastRow.querySelector(".end-hour").value,
+                    lastRow.querySelector(".end-minute").value,
+                    lastRow.querySelector(".end-period").value
+                );
 
-                const startMinute =
-                    lastRow.querySelector(".end-minute").value;
+                // Default next period starts when previous period ends
+                const nextStart = lastEnd;
+                const nextEnd = lastEnd + 60;
 
-                const startPeriod =
-                    lastRow.querySelector(".end-period").value;
-
-                let nextHour =
-                    parseInt(startHour);
-
-                let nextPeriod =
-                    startPeriod;
-
-                nextHour++;
-
-                if (nextHour === 12 && startPeriod === "AM") {
-
-                    nextPeriod = "PM";
-
-                }
-                else if (nextHour > 12) {
-
-                    nextHour = 1;
-
-                }
-
-                const endHour =
-                    nextHour.toString().padStart(2, '0');
-
-                const newRow =
-                    document.createElement("div");
+                const newRow = document.createElement("div");
 
                 newRow.className =
-                    "row align-items-end mb-4 schedule-row";
+                    "schedule-row border rounded p-3 mb-3";
+
+                newRow.dataset.index = index;
 
                 newRow.innerHTML = `
 
-                <div class="col-md-1 text-center">
+                    <input type="hidden"
+                           name="TimePeriods[${index}].PeriodNumber"
+                           class="period-number"
+                           value="${index + 1}" />
 
-                    <label class="form-label d-block">&nbsp;</label>
+                    <input type="hidden"
+                           name="TimePeriods[${index}].StartTime"
+                           class="start-time-value" />
 
-                    <span class="fw-bold fs-5">
-                        ${rowNumber}
-                    </span>
+                    <input type="hidden"
+                           name="TimePeriods[${index}].EndTime"
+                           class="end-time-value" />
 
-                </div>
+                    <div class="row align-items-end">
 
-                <div class="col-md-5">
+                        <div class="col-md-1 text-center">
+                            <label class="form-label d-block">
+                                Period
+                            </label>
 
-                    <label class="form-label fw-semibold">
-                        Start Time
-                    </label>
+                            <span class="fw-bold fs-5 period-label">
+                                ${index + 1}
+                            </span>
+                        </div>
 
-                    <div class="d-flex gap-2">
+                        <div class="col-md-5">
 
-                        <select class="form-select start-hour"
-                                data-bs-toggle="tooltip"
-                                title="Select start hour">
+                            <label class="form-label fw-semibold">
+                                Start Time
+                            </label>
 
-                            ${generateHours(startHour)}
+                            <div class="d-flex gap-2">
 
-                        </select>
+                                <select class="form-select start-hour">
+                                    ${generateHours()}
+                                </select>
 
-                        <select class="form-select start-minute"
-                                data-bs-toggle="tooltip"
-                                title="Select start minute">
+                                <select class="form-select start-minute">
+                                    ${generateMinutes()}
+                                </select>
 
-                            ${generateMinutes(startMinute)}
+                                <select class="form-select start-period">
+                                    <option>AM</option>
+                                    <option>PM</option>
+                                </select>
 
-                        </select>
+                            </div>
 
-                        <select class="form-select start-period"
-                                data-bs-toggle="tooltip"
-                                title="Select start period">
+                        </div>
 
-                            <option ${startPeriod === 'AM' ? 'selected' : ''}>AM</option>
-                            <option ${startPeriod === 'PM' ? 'selected' : ''}>PM</option>
+                        <div class="col-md-5">
 
-                        </select>
+                            <label class="form-label fw-semibold">
+                                End Time
+                            </label>
 
-                    </div>
+                            <div class="d-flex gap-2">
 
-                </div>
+                                <select class="form-select end-hour">
+                                    ${generateHours()}
+                                </select>
 
-                <div class="col-md-5">
+                                <select class="form-select end-minute">
+                                    ${generateMinutes()}
+                                </select>
 
-                    <label class="form-label fw-semibold">
-                        End Time
-                    </label>
+                                <select class="form-select end-period">
+                                    <option>AM</option>
+                                    <option>PM</option>
+                                </select>
 
-                    <div class="d-flex gap-2">
+                            </div>
 
-                        <select class="form-select end-hour"
-                                data-bs-toggle="tooltip"
-                                title="Select end hour">
-
-                            ${generateHours(endHour)}
-
-                        </select>
-
-                        <select class="form-select end-minute"
-                                data-bs-toggle="tooltip"
-                                title="Select end minute">
-
-                            ${generateMinutes(startMinute)}
-
-                        </select>
-
-                        <select class="form-select end-period"
-                                data-bs-toggle="tooltip"
-                                title="Select end period">
-
-                            <option ${nextPeriod === 'AM' ? 'selected' : ''}>AM</option>
-                            <option ${nextPeriod === 'PM' ? 'selected' : ''}>PM</option>
-
-                        </select>
+                        </div>
 
                     </div>
 
-                </div>
+                    <div class="mt-3">
 
-            `;
+                        <div class="form-check">
+
+                            <input type="checkbox"
+                                   name="TimePeriods[${index}].IsBreak"
+                                   value="true"
+                                   class="form-check-input is-break" />
+
+                            <input type="hidden"
+                                   name="TimePeriods[${index}].IsBreak"
+                                   value="false" />
+
+                            <label class="form-check-label fw-semibold">
+                                Break Period (e.g. Recess or Lunch)
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                `;
 
                 container.appendChild(newRow);
+
+                const startSelectors = {
+                    hour: newRow.querySelector(".start-hour"),
+                    minute: newRow.querySelector(".start-minute"),
+                    period: newRow.querySelector(".start-period")
+                };
+
+                const endSelectors = {
+                    hour: newRow.querySelector(".end-hour"),
+                    minute: newRow.querySelector(".end-minute"),
+                    period: newRow.querySelector(".end-period")
+                };
+
+                setTime(startSelectors, nextStart);
+                setTime(endSelectors, nextEnd);
+
+                updateRowTimes(newRow);
 
                 initializeTooltips();
 
             });
 
-        function generateHours(selected = "") {
+        function generateHours() {
 
             let html = "";
 
             for (let i = 1; i <= 12; i++) {
 
-                let value =
-                    String(i).padStart(2, '0');
+                const value = String(i).padStart(2, "0");
 
-                html += `
-                    <option ${selected == value ? 'selected' : ''}>
-                        ${value}
-                    </option>
-                `;
+                html += `<option value="${value}">${value}</option>`;
+
             }
 
             return html;
+
         }
 
-        function generateMinutes(selected = "") {
+        function generateMinutes() {
 
             let html = "";
 
             for (let i = 0; i < 60; i += 5) {
 
-                let value =
-                    String(i).padStart(2, '0');
+                const value = String(i).padStart(2, "0");
 
-                html += `
-                    <option ${selected == value ? 'selected' : ''}>
-                        ${value}
-                    </option>
-                `;
+                html += `<option value="${value}">${value}</option>`;
+
             }
 
             return html;
+
         }
 
     </script>
-
 }

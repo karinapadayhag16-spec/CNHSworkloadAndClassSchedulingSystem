@@ -1,0 +1,206 @@
+﻿
+@model CNHSworkloadAndClassSchedulingSystem.Models.Domain.TimeSchedule
+
+@{
+    ViewData["Title"] = "View Time Schedule";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0 fw-bold">
+                <i class="bi bi-calendar-week"></i>
+                Time Schedule Details
+            </h3>
+        </div>
+
+        <div class="card-body p-4">
+
+            <!-- Schedule Information -->
+            <div class="row mb-4">
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">
+                        Schedule Name
+                    </label>
+
+                    <h5>@Model.ScheduleName</h5>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">
+                        Version
+                    </label>
+
+                    <h5>Version @Model.VersionNumber</h5>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">
+                        Description
+                    </label>
+
+                    <p>
+                        @(string.IsNullOrWhiteSpace(Model.Description)
+                            ? "No description provided."
+                            : Model.Description)
+                    </p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">
+                        Date Created
+                    </label>
+
+                    <p>@Model.CreatedAt.ToLocalTime().ToString("MMMM dd, yyyy hh:mm tt")</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">
+                        Status
+                    </label>
+
+                    <div>
+                        @if (Model.IsArchived)
+                        {
+                            <span class="badge bg-secondary">
+                                Archived
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">
+                                Available
+                            </span>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold text-muted">
+                        Change Reason
+                    </label>
+
+                    <p>
+                        @(string.IsNullOrWhiteSpace(Model.ChangeReason)
+                            ? "Initial schedule version"
+                            : Model.ChangeReason)
+                    </p>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <!-- Time Periods -->
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-clock"></i>
+                Time Periods
+            </h5>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover text-center">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th width="80">Period</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th width="150">Type</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model.TimePeriods != null &&
+                             Model.TimePeriods.Any())
+                        {
+                            @foreach (var period in Model.TimePeriods
+                                .OrderBy(p => p.PeriodNumber))
+                            {
+                                <tr>
+
+                                    <td class="fw-bold">
+                                        @period.PeriodNumber
+                                    </td>
+
+                                    <td>
+                                        @DateTime.Today.Add(period.StartTime)
+                                            .ToString("hh:mm tt")
+                                    </td>
+
+                                    <td>
+                                        @DateTime.Today.Add(period.EndTime)
+                                            .ToString("hh:mm tt")
+                                    </td>
+
+                                    <td>
+                                        @if (period.IsBreak)
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-cup-hot"></i>
+                                                Break
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary">
+                                                <i class="bi bi-book"></i>
+                                                Class
+                                            </span>
+                                        }
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-muted">
+                                    No time periods found.
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- Buttons -->
+            <div class="text-end mt-4">
+
+                <a asp-controller="TimeSched"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left-circle"></i>
+                    Back to Schedules
+
+                </a>
+
+                @if (!Model.IsArchived)
+                {
+                    <a asp-controller="TimeSched"
+                       asp-action="EditSchedule"
+                       asp-route-id="@Model.TimeScheduleId"
+                       class="btn btn-warning">
+
+                        <i class="bi bi-pencil-square"></i>
+                        Create New Version
+
+                    </a>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

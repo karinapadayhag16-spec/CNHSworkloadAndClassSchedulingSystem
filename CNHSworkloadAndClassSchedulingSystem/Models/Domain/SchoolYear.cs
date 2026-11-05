@@ -1,11 +1,15 @@
-﻿namespace CNHSworkloadAndClassSchedulingSystem.Models.Domain
+﻿using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
+
+namespace CNHSworkloadAndClassSchedulingSystem.Models.Domain
 {
     public class SchoolYear
     {
         public int SchoolYearId { get; set; }
         public string? YearLabel { get; set; }
-        public bool IsCurrent { get; set; }
-        public ICollection<Term> Terms { get; set; } = new List<Term>();
+        public SchoolYearStatus Status { get; set; }
+            = SchoolYearStatus.Setup;
+        public ICollection<Term> Terms { get; set; }
+            = new List<Term>();
     }
 }
 

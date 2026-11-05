@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace CNHSworkloadAndClassSchedulingSystem.Models.ViewModels
 {
@@ -14,7 +15,8 @@ namespace CNHSworkloadAndClassSchedulingSystem.Models.ViewModels
         [Display(Name = "End Year")]
         public int EndYear { get; set; }
 
-        [Display(Name = "Current School Year")]
-        public bool IsCurrent { get; set; }
+        //[Display(Name = "Current School Year")]
+        public SchoolYearStatus Status { get; set; }
+            = SchoolYearStatus.Setup;
     }
 }

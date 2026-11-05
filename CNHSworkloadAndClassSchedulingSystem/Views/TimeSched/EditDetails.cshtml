@@ -1,0 +1,97 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.TimeScheduleViewModel
+
+@{
+    ViewData["Title"] = "Edit Schedule Details";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square"></i>
+                        Edit Class Time Schedule Details
+                    </h4>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-action="EditDetails"
+                          asp-route-id="@ViewBag.TimeScheduleId"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="ScheduleName"
+                                   class="form-label fw-bold">
+                                Schedule Name
+                            </label>
+
+                            <input asp-for="ScheduleName"
+                                   class="form-control" />
+
+                            <span asp-validation-for="ScheduleName"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Description"
+                                   class="form-label fw-bold">
+                                Description
+                            </label>
+
+                            <textarea asp-for="Description"
+                                      class="form-control"
+                                      rows="3"></textarea>
+
+                            <span asp-validation-for="Description"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
+                            Editing these details will not create a
+                            new schedule version or modify the
+                            existing time periods.
+                        </div>
+
+                        <div class="text-end">
+
+                            <button type="submit"
+                                    class="btn btn-success">
+                                <i class="bi bi-save"></i>
+                                Save Changes
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-secondary">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
