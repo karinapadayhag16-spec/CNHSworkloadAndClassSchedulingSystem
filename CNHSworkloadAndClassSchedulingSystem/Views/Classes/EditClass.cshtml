@@ -3,3 +3,185 @@
 *@
 @{
 }
+@{
+    ViewData["Title"] = "Edit Class";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-11">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-warning">
+
+                    <h3 class="mb-0 fw-bold text-dark">
+
+                        <i class="bi bi-pencil-square"></i>
+                        Edit Class
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form>
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-bold">
+                                School Year
+                            </label>
+
+                            <select class="form-select"
+                                    style="max-width:500px;"
+                                    data-bs-toggle="tooltip"
+                                    title="Select the school year">
+
+                                <option>2026 - 2027</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Department
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        title="Select department">
+
+                                    <option>JHS</option>
+                                    <option>SHS</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Grade Level
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        title="Select grade level">
+
+                                    <option>Grade 7</option>
+                                    <option>Grade 8</option>
+                                    <option>Grade 9</option>
+                                    <option>Grade 10</option>
+                                    <option>Grade 11</option>
+                                    <option>Grade 12</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Section Name
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       value="Rizal"
+                                       placeholder="e.g. Rizal"
+                                       data-bs-toggle="tooltip"
+                                       title="Edit section name" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Adviser
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        title="Select adviser">
+
+                                    <option>Juan Dela Cruz</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <hr />
+
+                        <div class="text-end">
+
+                            <button type="submit"
+                                    class="btn btn-warning"
+                                    data-bs-toggle="tooltip"
+                                    title="Save changes to this class">
+
+                                <i class="bi bi-check-circle"></i>
+                                Update Class
+
+                            </button>
+
+                            <a asp-controller="Classes"
+                               asp-action="Index"
+                               class="btn btn-secondary"
+                               data-bs-toggle="tooltip"
+                               title="Return to class list">
+
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}

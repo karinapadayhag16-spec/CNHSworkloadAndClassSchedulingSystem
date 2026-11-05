@@ -1,5 +1,175 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Add Class";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-11">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-primary">
+
+                    <h3 class="mb-0 fw-bold text-white">
+
+                        <i class="bi bi-plus-circle"></i>
+                        Add Class
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form>
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-bold">
+                                School Year
+                            </label>
+
+                            <select class="form-select"
+                                    style="max-width:500px;"
+                                    data-bs-toggle="tooltip"
+                                    title="Select the school year">
+
+                                <option>Select School Year</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Department
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        title="Select department">
+
+                                    <option>Select Department</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Grade Level
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        title="Select grade level">
+
+                                    <option>Select Grade Level</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Section Name
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="e.g. Rizal"
+                                       data-bs-toggle="tooltip"
+                                       title="Enter section name" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Adviser
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        title="Select adviser">
+
+                                    <option>Select Adviser</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <hr />
+
+                        <div class="text-end">
+
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    data-bs-toggle="tooltip"
+                                    title="Save this class">
+
+                                <i class="bi bi-save"></i>
+                                Save Class
+
+                            </button>
+
+                            <a asp-controller="Classes"
+                               asp-action="Index"
+                               class="btn btn-secondary"
+                               data-bs-toggle="tooltip"
+                               title="Return to class list">
+
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
 }
