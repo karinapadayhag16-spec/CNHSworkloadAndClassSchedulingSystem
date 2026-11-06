@@ -3,3 +3,186 @@
 *@
 @{
 }
+@{
+    ViewData["Title"] = "Edit Teacher";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-11">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-warning">
+
+                    <h3 class="mb-0 fw-bold text-dark">
+
+                        <i class="bi bi-pencil-square"></i>
+                        Edit Teacher
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Full Name
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       value="Juan Dela Cruz"
+                                       placeholder="Enter teacher name"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="right"
+                                       title="Edit teacher name" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Sex
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="Select teacher sex">
+
+                                    <option selected>Male</option>
+                                    <option>Female</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Department
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="Select teacher department">
+
+                                    <option selected>JHS</option>
+                                    <option>SHS</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Expertise
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       value="Mathematics"
+                                       placeholder="Enter expertise"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="right"
+                                       title="Edit teacher expertise" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-bold">
+                                Actual Teaching Load
+                            </label>
+
+                            <input type="number"
+                                   class="form-control"
+                                   style="max-width:500px;"
+                                   value="24"
+                                   placeholder="Enter teaching load"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="right"
+                                   title="Edit actual teaching load" />
+
+                        </div>
+
+                        <hr />
+
+                        <div class="text-end">
+
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Save changes">
+
+                                <i class="bi bi-save"></i>
+                                Save Changes
+
+                            </button>
+
+                            <a asp-controller="Teacher"
+                               asp-action="Index"
+                               class="btn btn-secondary"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Return to teacher list">
+
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}

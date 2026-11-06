@@ -1,0 +1,155 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.TimeSchedule>
+
+@{
+    ViewData["Title"] = "Archived Schedules";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2 class="fw-bold">
+            Archived Schedule Versions
+        </h2>
+
+        <a asp-controller="TimeSched"
+           asp-action="Index"
+           class="btn btn-secondary"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           title="Return to active schedules">
+
+            <i class="bi bi-arrow-left-circle"></i>
+            Back
+
+        </a>
+
+    </div>
+
+    <table class="table table-bordered table-hover text-center">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th width="60">#</th>
+
+                <th>Schedule Name</th>
+
+                <th width="100">Version</th>
+
+                <th width="130">Number of Periods</th>
+
+                <th width="120">Status</th>
+
+                <th width="150">Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @{
+                int count = 1;
+            }
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var schedule in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @count
+                        </td>
+
+                        <td class="fw-semibold">
+                            @schedule.ScheduleName
+                        </td>
+
+                        <td>
+                            Version @schedule.VersionNumber
+                        </td>
+
+                        <td>
+                            @schedule.TimePeriods.Count
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-secondary">
+                                Archived
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a asp-controller="TimeSched"
+                               asp-action="ViewSchedule"
+                               asp-route-id="@schedule.TimeScheduleId"
+                               class="btn btn-info btn-sm"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="View this archived schedule">
+
+                                <i class="bi bi-eye"></i>
+                                View
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    count++;
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="6"
+                        class="text-muted py-4">
+
+                        No archived schedules found.
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}

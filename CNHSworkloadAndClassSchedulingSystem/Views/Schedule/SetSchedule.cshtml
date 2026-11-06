@@ -1,0 +1,171 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    ViewData["Title"] = "Set Schedule";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-11">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-primary">
+
+                    <h3 class="mb-0 fw-bold text-white">
+
+                        <i class="bi bi-calendar-check"></i>
+                        Set Schedule
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    School Year
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="Select the School Year">
+
+                                    <option>Select School Year</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Class
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="Select the Class">
+
+                                    <option>Select Class</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Time Schedule
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="Select the schedule version">
+
+                                    <option>Select Schedule</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Adviser
+                                </label>
+
+                                <select class="form-select"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="Select adviser">
+
+                                    <option>Select Adviser</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <hr />
+
+                        <div class="text-end">
+
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Save schedule assignment">
+
+                                <i class="bi bi-save"></i>
+                                Save Schedule
+
+                            </button>
+
+                            <a asp-controller="Schedule"
+                               asp-action="Index"
+                               class="btn btn-secondary"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Return to schedule list">
+
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}

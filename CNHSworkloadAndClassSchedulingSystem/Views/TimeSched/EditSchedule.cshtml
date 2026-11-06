@@ -20,7 +20,8 @@
 
                 <div class="card-body p-4">
 
-                    <form asp-controller="TimeSched"
+                    <form id="scheduleVersionForm"
+                          asp-controller="TimeSched"
                           asp-action="EditSchedule"
                           asp-route-id="@scheduleId"
                           method="post">
@@ -302,14 +303,17 @@
 
                         <hr />
 
-                        <!-- Buttons -->
+                        <!-- Buttons -->   
+                        <! --               -->
                         <div class="text-end">
 
-                            <button type="submit"
+                            <button type="button"
+                                    id="createVersionBtn"
                                     class="btn btn-success">
 
                                 <i class="bi bi-save"></i>
                                 Create New Version
+
                             </button>
 
                             <a asp-controller="TimeSched"
@@ -329,7 +333,90 @@
         </div>
     </div>
 </div>
+<!-- Create New Version Warning Modal -->
+<div class="modal fade"
+     id="createVersionModal"
+     tabindex="-1"
+     aria-labelledby="createVersionModalLabel"
+     aria-hidden="true">
 
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content border-danger">
+
+            <div class="modal-header bg-danger">
+
+                <h5 class="modal-title fw-bold"
+                    id="createVersionModalLabel">
+
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    Warning
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="alert alert-danger mb-0">
+
+                    <h6 class="fw-bold mb-3">
+                        Please review the following:
+                    </h6>
+
+                    <ul class="mb-0">
+
+                        <li>
+                            A new schedule version will be created.
+                        </li>
+
+                        <li>
+                            All classes assigned to the old version in the
+                            active school year will receive the new version.
+                        </li>
+
+                        <li>
+                            Previous school year assignments will remain
+                            unchanged.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    Exit
+
+                </button>
+
+                <button type="button"
+                        id="confirmCreateVersion"
+                        class="btn btn-success">
+
+                    <i class="bi bi-check-circle"></i>
+                    Continue
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 @section Scripts {
 
     <partial name="_ValidationScriptsPartial" />
@@ -593,6 +680,25 @@
                 updateRowTimes(newRow);
 
             });
+        const createVersionModal =
+            new bootstrap.Modal(
+                document.getElementById("createVersionModal")
+            );
 
+        document.getElementById("createVersionBtn")
+            .addEventListener("click", function() {
+
+                createVersionModal.show();
+
+            });
+
+        document.getElementById("confirmCreateVersion")
+            .addEventListener("click", function() {
+
+                document.getElementById(
+                    "scheduleVersionForm"
+                ).submit();
+
+            });
     </script>
 }
