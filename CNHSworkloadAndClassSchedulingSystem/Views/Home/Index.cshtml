@@ -1,54 +1,200 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Dashboard";
 }
 
 <div class="container-fluid mt-4">
+
     <h3 class="fw-bold mb-4">
-        <i class="bi bi-speedometer2 me-2"></i> Dashboard Updated
+        <i class="bi bi-speedometer2 me-2"></i>
+        Dashboard
     </h3>
 
     <div class="row g-4">
-       
+
+        <!-- Subjects -->
         <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-book display-3 text-primary mb-3"></i>
-                    <h4 class="card-title fw-bold">Subjects</h4>
-                    <p class="card-text">JHS 00 | SHS 00</p>
-                    <p class="card-text fw-semibold">00 Total Subjects</p>
+
+            <a asp-controller="Subject"
+               asp-action="Index"
+               class="text-decoration-none text-dark">
+
+                <div class="card dashboard-card shadow-sm border-0 h-100">
+
+                    <div class="card-body">
+
+                        <i class="bi bi-book display-3 text-primary mb-3 dashboard-icon"></i>
+
+                        <h4 class="card-title fw-bold">
+                            Subjects
+                        </h4>
+
+                        <p class="card-text">
+                            JHS @ViewBag.JhsSubjects |
+                            SHS @ViewBag.ShsSubjects
+                        </p>
+
+                        <p class="card-text fw-semibold">
+                            @ViewBag.TotalSubjects Total Subjects
+                        </p>
+
+                    </div>
+
                 </div>
-            </div>
+
+            </a>
+
         </div>
 
+        <!-- Classes -->
         <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-people display-3 text-success mb-3"></i>
-                    <h4 class="card-title fw-bold">Classes</h4>
-                    <p class="card-text">JHS 00 | SHS 00</p>
-                    <p class="card-text fw-semibold">00 Total Classes</p>
+
+            <a asp-controller="Class"
+               asp-action="Index"
+               class="text-decoration-none text-dark">
+
+                <div class="card dashboard-card shadow-sm border-0 h-100">
+
+                    <div class="card-body">
+
+                        <i class="bi bi-people display-3 text-success mb-3 dashboard-icon"></i>
+
+                        <h4 class="card-title fw-bold">
+                            Classes
+                        </h4>
+
+                        <p class="card-text">
+                            JHS @ViewBag.JhsClasses |
+                            SHS @ViewBag.ShsClasses
+                        </p>
+
+                        <p class="card-text fw-semibold">
+                            @ViewBag.TotalClasses Total Classes
+                        </p>
+
+                    </div>
+
                 </div>
-            </div>
+
+            </a>
+
         </div>
 
+        <!-- Teachers -->
         <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-person-badge display-3 text-warning mb-3"></i>
-                    <h4 class="card-title fw-bold">Teachers</h4>
-                    <p class="card-text fw-semibold">00 Total Teachers</p>
+
+            <a asp-controller="Teacher"
+               asp-action="Index"
+               class="text-decoration-none text-dark">
+
+                <div class="card dashboard-card shadow-sm border-0 h-100">
+
+                    <div class="card-body">
+
+                        <i class="bi bi-person-badge display-3 text-warning mb-3 dashboard-icon"></i>
+
+                        <h4 class="card-title fw-bold">
+                            Teachers
+                        </h4>
+
+                        <p class="card-text fw-semibold">
+                            @ViewBag.TotalTeachers Total Teachers
+                        </p>
+
+                    </div>
+
                 </div>
-            </div>
+
+            </a>
+
         </div>
 
+        <!-- Users -->
         <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-person-circle display-3 text-info mb-3"></i>
-                    <h4 class="card-title fw-bold">Users</h4>
-                    <p class="card-text fw-semibold">00 Total Users</p>
+
+            <a asp-controller="UserSetting"
+               asp-action="Index"
+               class="text-decoration-none text-dark">
+
+                <div class="card dashboard-card shadow-sm border-0 h-100">
+
+                    <div class="card-body">
+
+                        <i class="bi bi-person-circle display-3 text-info mb-3 dashboard-icon"></i>
+
+                        <h4 class="card-title fw-bold">
+                            Users
+                        </h4>
+
+                        <p class="card-text fw-semibold">
+                            @ViewBag.TotalUsers Total Users
+                        </p>
+
+                    </div>
+
                 </div>
-            </div>
+
+            </a>
+
         </div>
+
     </div>
+
 </div>
+
+<style>
+
+  
+    /* Dashboard Card Design */
+    .dashboard-card {
+        height: 220px;
+        width: 100%;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+    }
+
+        /* Center Card Content */
+        .dashboard-card .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+
+    /* Make all dashboard columns equal */
+    .row.g-4 > div {
+        display: flex;
+    }
+
+        .row.g-4 > div > a {
+            display: flex;
+            width: 100%;
+            text-decoration: none;
+        }
+
+            .row.g-4 > div > a > .dashboard-card {
+                width: 100%;
+                height: 220px;
+            }
+
+    /* Icon Animation */
+    .dashboard-icon {
+        transition: transform 0.3s ease;
+    }
+
+    /* Card Hover Effect */
+    .dashboard-card:hover {
+        background-color: #ffe5e5;
+        box-shadow: 0 0 12px rgba(220, 53, 69, .20), 0 0 25px rgba(220, 53, 69, .15) !important;
+        transform: translateY(-5px);
+    }
+
+        /* Icon Hover Effect */
+        .dashboard-card:hover .dashboard-icon {
+            transform: scale(1.3);
+        }
+
+</style>

@@ -1,15 +1,15 @@
-﻿@{
+﻿@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection>
+
+@{
     ViewData["Title"] = "Class";
 }
-
-@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection>
 
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
 
         <h2 class="fw-bold">
-            Class Management UPDATED
+            Class Management
         </h2>
 
         <a asp-controller="Class"
@@ -26,17 +26,60 @@
 
     </div>
 
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-3"
+             role="alert">
+
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+            @TempData["ErrorMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-3"
+             role="alert">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+    }
+
     <table class="table table-bordered table-hover text-center">
 
         <thead class="table-dark">
 
             <tr>
+
                 <th width="80">#</th>
+
                 <th>Department</th>
+
                 <th>Grade Level</th>
+
                 <th>Section</th>
+
                 <th>Adviser</th>
+
                 <th width="150">Actions</th>
+
             </tr>
 
         </thead>
@@ -53,20 +96,30 @@
                 {
                     <tr>
 
-                        <td>@count</td>
-
-                        <td>@count</td>
-
-                        <td>@classSection.Department</td>
-
-                        <td>@classSection.GradeLevel</td>
-
-                        <td>@classSection.SectionName</td>
+                        <td>
+                            @count
+                        </td>
 
                         <td>
+                            @classSection.Department
+                        </td>
+
+                        <td>
+                            @classSection.GradeLevel
+                        </td>
+
+                        <td>
+                            @classSection.SectionName
+                        </td>
+
+                        <td>
+
                             @if (classSection.Adviser != null)
                             {
-                                <span>@classSection.Adviser.FirstName @classSection.Adviser.LastName</span>
+                                <span>
+                                    @classSection.Adviser.FirstName
+                                    @classSection.Adviser.LastName
+                                </span>
                             }
                             else
                             {
@@ -74,13 +127,8 @@
                                     No Adviser Assigned
                                 </span>
                             }
+
                         </td>
-
-                        <td>-</td>
-
-                        <td>-</td>
-
-                        <td>-</td>
 
                         <td>
 

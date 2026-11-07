@@ -1,0 +1,246 @@
+﻿cshtml
+@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register a New User";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-11">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-primary">
+
+                    <h3 class="mb-0 fw-bold text-white">
+                        <i class="bi bi-person-plus"></i>
+                        Register a New User
+                    </h3>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-controller="AdminUser"
+                          asp-action="Register"
+                          method="post"
+                          id="registerForm">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    First Name
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="userfirstname"
+                                       asp-for="FirstName"
+                                       placeholder="Enter first name"
+                                       required />
+
+                                <span asp-validation-for="FirstName"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Last Name
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="userlastname"
+                                       asp-for="LastName"
+                                       placeholder="Enter last name"
+                                       required />
+
+                                <span asp-validation-for="LastName"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+                                Username
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="username"
+                                   asp-for="UserName"
+                                   placeholder="Automatically generated username"
+                                   readonly />
+
+                            <span asp-validation-for="UserName"
+                                  class="text-danger"></span>
+
+                            <div class="form-text">
+                                Username will automatically be generated
+                                using your first name and last name.
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Password</label>
+
+                            <input type="password"
+                                   class="form-control"
+                                   id="password"
+                                   asp-for="Password"
+                                   placeholder="Enter password"
+                                   required
+                                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}" />
+
+                            <div class="form-text text-dark fw-bold">
+                                Password must contain:
+                                <br />• At least 8 characters
+                                <br />• One number
+                                <br />• One uppercase letter
+                                <br />• One lowercase letter
+                                <br />• One special character
+                            </div>
+                        
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger"></span>
+
+                           
+
+                        </div>
+
+                        <hr />
+
+                        <div class="text-end">
+
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    data-bs-toggle="tooltip"
+                                    title="Register this user">
+
+                                <i class="bi bi-save"></i>
+                                Submit
+
+                            </button>
+
+                            <a asp-controller="AdminUser"
+                               asp-action="ViewUsers"
+                               class="btn btn-secondary"
+                               data-bs-toggle="tooltip"
+                               title="Return to user list">
+
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // Bootstrap Tooltips
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Username Generation
+            const firstNameInput =
+                document.getElementById('userfirstname');
+
+            const lastNameInput =
+                document.getElementById('userlastname');
+
+            const usernameInput =
+                document.getElementById('username');
+
+            function generateUsername() {
+
+                const firstName =
+                    firstNameInput.value.trim();
+
+                const lastName =
+                    lastNameInput.value.trim();
+
+                const username =
+                    (firstName + "." + lastName)
+                        .toLowerCase()
+                        .replace(/\s+/g, '');
+
+                usernameInput.value =
+                    firstName && lastName ? username : '';
+
+            }
+
+            firstNameInput.addEventListener(
+                'input',
+                generateUsername
+            );
+
+            lastNameInput.addEventListener(
+                'input',
+                generateUsername
+            );
+
+            // Password Validation
+            document.getElementById('registerForm')
+                .addEventListener('submit', function(event) {
+
+                    const password =
+                        document.getElementById('password').value;
+
+                    const pattern =
+                        /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}/;
+
+                    if (!pattern.test(password)) {
+
+                        alert(
+                            'Password must contain at least 8 characters, '+
+                            'one number, one uppercase letter, ' +
+                            'one lowercase letter, and one special character.'
+                        );
+
+                        event.preventDefault();
+
+                    }
+
+                });
+
+        });
+
+    </script>
+
+}

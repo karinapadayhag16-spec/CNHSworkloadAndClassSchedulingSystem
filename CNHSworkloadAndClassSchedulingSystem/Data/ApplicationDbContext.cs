@@ -21,6 +21,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<ClassSection> ClassSections { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        //added
+        
+         
+    
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
