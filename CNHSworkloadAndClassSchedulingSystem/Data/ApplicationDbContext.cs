@@ -19,6 +19,8 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
         public DbSet<TimePeriod> TimePeriods { get; set; }
         public DbSet<ClassSectionSchedule> ClassSectionSchedules { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<ClassSection> ClassSections { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

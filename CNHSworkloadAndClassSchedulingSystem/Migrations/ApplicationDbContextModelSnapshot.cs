@@ -106,7 +106,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassSectionID"));
 
-                    b.Property<int>("AdviserID")
+                    b.Property<int?>("AdviserID")
                         .HasColumnType("int");
 
                     b.Property<int>("Department")
@@ -133,7 +133,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
 
                     b.HasIndex("SchoolYearID");
 
-                    b.ToTable("ClassSection");
+                    b.ToTable("ClassSections");
                 });
 
             modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSectionSchedule", b =>
@@ -298,7 +298,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
 
                     b.HasIndex("SchoolYearID");
 
-                    b.ToTable("Teacher");
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("CNHSworkloadAndClassSchedulingSystem.Models.Domain.TeacherExpertise", b =>
@@ -556,8 +556,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Migrations
                     b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher", "Adviser")
                         .WithMany()
                         .HasForeignKey("AdviserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection", "PreviousClassSection")
                         .WithMany()

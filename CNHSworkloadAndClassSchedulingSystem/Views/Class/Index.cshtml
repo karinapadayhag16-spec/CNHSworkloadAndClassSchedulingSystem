@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Classes";
+    ViewData["Title"] = "Class";
 }
 
 @model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection>
@@ -12,7 +12,7 @@
             Class Management
         </h2>
 
-        <a asp-controller="Classes"
+        <a asp-controller="Class"
            asp-action="AddClass"
            class="btn btn-primary"
            data-bs-toggle="tooltip"
@@ -55,8 +55,25 @@
 
                         <td>@count</td>
 
+                        <td>@count</td>
+
+                        <td>@classSection.Department</td>
+
+                        <td>@classSection.GradeLevel</td>
+
+                        <td>@classSection.SectionName</td>
+
                         <td>
-                            @classSection
+                            @if (classSection.Adviser != null)
+                            {
+                                <span>@classSection.Adviser.FirstName @classSection.Adviser.LastName</span>
+                            }
+                            else
+                            {
+                                <span class="text-warning fw-semibold">
+                                    No Adviser Assigned
+                                </span>
+                            }
                         </td>
 
                         <td>-</td>
@@ -67,7 +84,7 @@
 
                         <td>
 
-                            <a asp-controller="Classes"
+                            <a asp-controller="Class"
                                asp-action="EditClass"
                                asp-route-id="@classSection.ClassSectionID"
                                class="btn btn-warning btn-sm"

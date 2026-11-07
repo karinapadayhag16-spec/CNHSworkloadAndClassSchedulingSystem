@@ -1,0 +1,234 @@
+﻿@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.ClassViewModel
+@{
+    ViewData["Title"] = "Add Class";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-11">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-primary">
+
+                    <h3 class="mb-0 fw-bold text-white">
+
+                        <i class="bi bi-plus-circle"></i>
+                        Add Class
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-controller="Class"
+                          asp-action="AddClass"
+                          method="post">
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-bold">
+                                School Year
+                            </label>
+
+                            <select asp-for="SchoolYearID"
+                                    asp-items="Model.SchoolYears"
+                                    class="form-select">
+                                <option value="">Select School Year</option>
+                            </select>
+                            <span asp-validation-for="SchoolYearID"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Department
+                                </label>
+
+                                <select asp-for="Department"
+                                        asp-items="Model.Departments"
+                                        class="form-select">
+                                    <option value="">Select Department</option>
+                                </select>
+                                <span asp-validation-for="Department"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Grade Level
+                                </label>
+
+                                <select asp-for="GradeLevel"
+                                        asp-items="Model.GradeLevels"
+                                        class="form-select">
+                                    <option value="">Select Grade Level</option>
+                                </select>
+                                <span asp-validation-for="GradeLevel"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Section Name
+                                </label>
+
+                                <input asp-for="SectionName"
+                                       class="form-control"
+                                       placeholder="Enter section name" />
+
+                                <span asp-validation-for="SectionName"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Adviser
+                                </label>
+
+                                <select asp-for="AdviserID"
+                                        asp-items="Model.Advisers"
+                                        class="form-select">
+                                    <option value="">No Adviser Assigned Yet</option>
+                                </select>
+                                <span asp-validation-for="AdviserID"
+                                      class="text-danger"></span>
+                                <div id="previousAdviserMessage"
+                                     class="form-text text-success"
+                                     style="display: none;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <hr />
+
+                        <div class="text-end">
+
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    data-bs-toggle="tooltip"
+                                    title="Save this class">
+
+                                <i class="bi bi-save"></i>
+                                Save Class
+
+                            </button>
+
+                            <a asp-controller="Classes"
+                               asp-action="Index"
+                               class="btn btn-secondary"
+                               data-bs-toggle="tooltip"
+                               title="Return to class list">
+
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+            $(document).ready(function () {
+
+            function getPreviousAdviser() {
+
+                var department = $("#Department").val();
+                var gradeLevel = $("#GradeLevel").val();
+                var sectionName = $("#SectionName").val().trim();
+
+                var adviserDropdown = $("#AdviserID");
+                var message = $("#previousAdviserMessage");
+
+                message.hide().text("");
+
+                if (!department || !gradeLevel || !sectionName) {
+                    return;
+                }
+
+                $.get('@Url.Action("GetPreviousAdviser", "Class")', {
+                    department: department,
+                    gradeLevel: gradeLevel,
+                    sectionName: sectionName
+                }, function (response) {
+
+                    if (response.found) {
+
+                        var adviserExists = adviserDropdown.find(
+                            "option[value='" + response.adviserID + "']"
+                        ).length > 0;
+
+                        if (adviserExists) {
+                            adviserDropdown.val(response.adviserID);
+
+                            message.text(
+                                "Suggested previous adviser: " +
+                                response.adviserName +
+                                " (SY " + response.previousYear + "). " +
+                                "You may change this selection."
+                            ).show();
+                        }
+                    }
+                });
+            }
+
+            $("#Department, #GradeLevel").on("change", getPreviousAdviser);
+
+            $("#SectionName").on("blur", getPreviousAdviser);
+
+            $("#AdviserID").on("change", function () {
+                $("#previousAdviserMessage").hide();
+            });
+
+        });
+
+    </script>
+
+}
