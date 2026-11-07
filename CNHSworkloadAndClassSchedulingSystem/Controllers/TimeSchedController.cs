@@ -516,6 +516,13 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        public IActionResult ArchivedSchedule()
+        {
+            var archivedSchedules = _context.TimeSchedules
+                .Where(x => x.IsArchived)
+                .ToList();
 
+            return View(archivedSchedules);
+        }
     }
 }

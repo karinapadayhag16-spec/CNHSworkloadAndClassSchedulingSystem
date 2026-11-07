@@ -12,17 +12,33 @@
             Time Schedule Management
         </h2>
 
-        <a asp-controller="TimeSched"
-           asp-action="AddSchedule"
-           class="btn btn-primary"
-           data-bs-toggle="tooltip"
-           data-bs-placement="top"
-           title="Add a new Time Schedule">
+        <div class="d-flex gap-2">
 
-            <i class="bi bi-plus-circle"></i>
-            Add Time Schedule
+            <a asp-controller="TimeSched"
+               asp-action="ArchivedSchedule"
+               class="btn btn-secondary"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="View archived schedule versions">
 
-        </a>
+                <i class="bi bi-archive"></i>
+                Archived Schedules
+
+            </a>
+
+            <a asp-controller="TimeSched"
+               asp-action="AddSchedule"
+               class="btn btn-primary"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Add a new Time Schedule">
+
+                <i class="bi bi-plus-circle"></i>
+                Add Time Schedule
+
+            </a>
+
+        </div>
 
     </div>
 
@@ -47,9 +63,9 @@
                 int count = 1;
             }
 
-            @if (Model != null && Model.Any())
+            @if (Model != null && Model.Any(x => !x.IsArchived))
             {
-                @foreach (var schedule in Model)
+                @foreach (var schedule in Model.Where(x => !x.IsArchived))
                 {
                     <tr>
 
@@ -68,18 +84,11 @@
                         </td>
 
                         <td>
-                            @if (schedule.IsArchived)
-                            {
-                                <span class="badge bg-secondary">
-                                    Archived
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-success">
-                                    Available
-                                </span>
-                            }
+
+                            <span class="badge bg-success">
+                                Available
+                            </span>
+
                         </td>
 
                         <td style="white-space: nowrap;">
@@ -99,32 +108,31 @@
 
                                 </a>
 
-                                @if (!schedule.IsArchived)
-                                {
-                                    <a asp-controller="TimeSched"
-                                       asp-action="EditSchedule"
-                                       asp-route-id="@schedule.TimeScheduleId"
-                                       class="btn btn-warning btn-sm"
-                                       data-bs-toggle="tooltip"
-                                       data-bs-placement="top"
-                                       title="Create a new version of this Time Schedule">
+                                <a asp-controller="TimeSched"
+                                   asp-action="EditSchedule"
+                                   asp-route-id="@schedule.TimeScheduleId"
+                                   class="btn btn-warning btn-sm"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="Create a new version of this Time Schedule">
 
-                                        <i class="bi bi-pencil-square"></i>
-                                        Edit
+                                    <i class="bi bi-pencil-square"></i>
+                                    Edit
 
-                                    </a>
+                                </a>
 
-                                    <a asp-controller="TimeSched"
-                                       asp-action="EditDetails"
-                                       asp-route-id="@schedule.TimeScheduleId"
-                                       class="btn btn-primary btn-sm"
-                                       title="Edit schedule name and description">
+                                <a asp-controller="TimeSched"
+                                   asp-action="EditDetails"
+                                   asp-route-id="@schedule.TimeScheduleId"
+                                   class="btn btn-primary btn-sm"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="Edit schedule name and description">
 
-                                        <i class="bi bi-pencil"></i>
-                                        Edit Details
+                                    <i class="bi bi-pencil"></i>
+                                    Edit Details
 
-                                    </a>
-                                }
+                                </a>
 
                             </div>
 
@@ -138,9 +146,14 @@
             else
             {
                 <tr>
-                    <td colspan="6" class="text-muted py-4">
-                        No time schedules have been added yet.
+
+                    <td colspan="6"
+                        class="text-muted py-4">
+
+                        No active time schedules have been added yet.
+
                     </td>
+
                 </tr>
             }
 
