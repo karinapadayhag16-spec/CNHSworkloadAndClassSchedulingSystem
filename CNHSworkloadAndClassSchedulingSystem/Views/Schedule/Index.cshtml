@@ -4,66 +4,203 @@
 
 <div class="container mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
         <h2 class="fw-bold">
             Schedule Management
         </h2>
 
-        <a asp-controller="Schedule"
-           asp-action="SetSchedule"
-           class="btn btn-primary"
-           data-bs-toggle="tooltip"
-           data-bs-placement="top"
-           title="Create a new schedule">
-
-            <i class="bi bi-plus-circle"></i>
-            Set Schedule
-
-        </a>
 
     </div>
 
-    <table class="table table-bordered table-hover text-center">
+    <div class="card shadow-sm border-0">
 
-        <thead class="table-dark">
+        <div class="card-body" >
 
-            <tr>
+            <div class="row mb-4">
 
-                <th width="80">#</th>
+                <div class="col-md-3">
 
-                <th>Class</th>
+                    <label class="form-label fw-bold">
+                        Department
+                    </label>
 
-                <th>Department</th>
+                    <select class="form-select"
+                            data-bs-toggle="tooltip"
+                            title="Select department">
 
-                <th>Grade Level</th>
+                        <option>Select Department</option>
+                        <option>JHS</option>
+                        <option>SHS</option>
 
-                <th>Section</th>
+                    </select>
 
-                <th>Schedule Type</th>
+                </div>
 
-                <th width="220">Actions</th>
+                <div class="col-md-3">
 
-            </tr>
+                    <label class="form-label fw-bold">
+                        Grade Level
+                    </label>
 
-        </thead>
+                    <select class="form-select"
+                            data-bs-toggle="tooltip"
+                            title="Select grade level">
 
-        <tbody>
+                        <option>Select Grade Level</option>
+                        <option>Grade 7</option>
+                        <option>Grade 8</option>
+                        <option>Grade 9</option>
+                        <option>Grade 10</option>
+                        <option>Grade 11</option>
+                        <option>Grade 12</option>
 
-            <tr>
+                    </select>
 
-                <td colspan="7"
-                    class="text-muted py-4">
+                </div>
 
-                    No schedules have been created yet.
+                <div class="col-md-3">
 
-                </td>
+                    <label class="form-label fw-bold">
+                        Section
+                    </label>
 
-            </tr>
+                    <select class="form-select"
+                            data-bs-toggle="tooltip"
+                            title="Select section">
 
-        </tbody>
+                        <option>Select Section</option>
 
-    </table>
+                    </select>
+
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+
+                    <a asp-controller="Schedule"
+                       asp-action="SetSchedule"
+                       class="btn btn-primary w-100"
+                       data-bs-toggle="tooltip"
+                       title="Assign a schedule">
+
+                        <i class="bi bi-calendar-plus"></i>
+                        Set Schedule
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <table class="table table-bordered text-center align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th width="130">
+                            Time
+                        </th>
+
+                        <th>Monday</th>
+
+                        <th>Tuesday</th>
+
+                        <th>Wednesday</th>
+
+                        <th>Thursday</th>
+
+                        <th>Friday</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>8:00 - 9:00 AM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>9:00 - 10:00 AM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>10:00 - 11:00 AM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>11:00 - 12:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>1:00 - 2:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>2:00 - 3:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>3:00 - 4:00 PM</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <div class="text-end mt-3">
+
+                <button class="btn btn-secondary"
+                        data-bs-toggle="tooltip"
+                        title="Print schedule">
+
+                    <i class="bi bi-printer"></i>
+                    Print
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 

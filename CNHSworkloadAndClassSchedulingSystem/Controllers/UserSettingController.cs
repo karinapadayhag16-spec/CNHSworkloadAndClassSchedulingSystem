@@ -8,5 +8,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
         {
             return View();
         }
+        public IActionResult AddUsers()
+        {
+            return View();
+        }
+
     }
+
 }
