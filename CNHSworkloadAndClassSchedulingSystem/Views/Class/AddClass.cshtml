@@ -1,25 +1,19 @@
 ﻿@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.ClassViewModel
+
 @{
     ViewData["Title"] = "Add Class";
 }
 
 <div class="container mt-4">
-
     <div class="row justify-content-center">
-
         <div class="col-lg-11">
-
             <div class="card shadow-lg border-0">
 
                 <div class="card-header bg-primary">
-
                     <h3 class="mb-0 fw-bold text-white">
-
                         <i class="bi bi-plus-circle"></i>
                         Add Class
-
                     </h3>
-
                 </div>
 
                 <div class="card-body p-4">
@@ -28,207 +22,408 @@
                           asp-action="AddClass"
                           method="post">
 
-                        <div class="mb-4">
+                        @Html.AntiForgeryToken()
 
-                            <label class="form-label fw-bold">
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <!-- SCHOOL YEAR -->
+                        <div class="mb-4">
+                            <label asp-for="SchoolYearID"
+                                   class="form-label fw-bold">
                                 School Year
                             </label>
 
                             <select asp-for="SchoolYearID"
                                     asp-items="Model.SchoolYears"
-                                    class="form-select">
+                                    class="form-select"
+                                    id="SchoolYearID">
                                 <option value="">Select School Year</option>
                             </select>
+
                             <span asp-validation-for="SchoolYearID"
                                   class="text-danger"></span>
-
                         </div>
 
+                        <!-- DEPARTMENT AND GRADE LEVEL -->
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
-
-                                <label class="form-label fw-bold">
+                                <label asp-for="Department"
+                                       class="form-label fw-bold">
                                     Department
                                 </label>
 
                                 <select asp-for="Department"
                                         asp-items="Model.Departments"
-                                        class="form-select">
+                                        class="form-select"
+                                        id="Department">
+
                                     <option value="">Select Department</option>
                                 </select>
+
                                 <span asp-validation-for="Department"
                                       class="text-danger"></span>
-
                             </div>
 
                             <div class="col-md-6 mb-3">
-
-                                <label class="form-label fw-bold">
+                                <label asp-for="GradeLevel"
+                                       class="form-label fw-bold">
                                     Grade Level
                                 </label>
 
                                 <select asp-for="GradeLevel"
                                         asp-items="Model.GradeLevels"
-                                        class="form-select">
+                                        class="form-select"
+                                        id="GradeLevel">
+
                                     <option value="">Select Grade Level</option>
                                 </select>
+
                                 <span asp-validation-for="GradeLevel"
                                       class="text-danger"></span>
-
                             </div>
 
                         </div>
 
+                        <!-- SECTION AND ADVISER -->
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
-
-                                <label class="form-label fw-bold">
+                                <label asp-for="SectionName"
+                                       class="form-label fw-bold">
                                     Section Name
                                 </label>
 
                                 <input asp-for="SectionName"
                                        class="form-control"
+                                       id="SectionName"
                                        placeholder="Enter section name" />
 
                                 <span asp-validation-for="SectionName"
                                       class="text-danger"></span>
-
                             </div>
 
                             <div class="col-md-6 mb-3">
-
-                                <label class="form-label fw-bold">
+                                <label asp-for="AdviserID"
+                                       class="form-label fw-bold">
                                     Adviser
                                 </label>
 
                                 <select asp-for="AdviserID"
                                         asp-items="Model.Advisers"
-                                        class="form-select">
-                                    <option value="">No Adviser Assigned Yet</option>
+                                        class="form-select"
+                                        id="AdviserID">
+
+                                    <option value="">
+                                        No Adviser Assigned Yet
+                                    </option>
                                 </select>
+
                                 <span asp-validation-for="AdviserID"
                                       class="text-danger"></span>
+
                                 <div id="previousAdviserMessage"
                                      class="form-text text-success"
                                      style="display: none;">
                                 </div>
-
                             </div>
 
                         </div>
 
-                        <hr />
+                        <hr class="my-4" />
 
-                        <div class="text-end">
+                        <!-- BUTTONS -->
+                        <div class="d-flex justify-content-end gap-2">
 
-                            <button type="submit"
-                                    class="btn btn-success"
-                                    data-bs-toggle="tooltip"
-                                    title="Save this class">
-
-                                <i class="bi bi-save"></i>
-                                Save Class
-
-                            </button>
-
-                            <a asp-controller="Classes"
+                            <a asp-controller="Class"
                                asp-action="Index"
-                               class="btn btn-secondary"
-                               data-bs-toggle="tooltip"
-                               title="Return to class list">
+                               class="btn btn-secondary">
 
                                 <i class="bi bi-arrow-left-circle"></i>
                                 Back
-
                             </a>
+
+                            <button type="submit"
+                                    class="btn btn-success">
+
+                                <i class="bi bi-save"></i>
+                                Save Class
+                            </button>
 
                         </div>
 
                     </form>
 
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
 
 @section Scripts {
 
-    <script>
+    <partial name="_ValidationScriptsPartial" />
 
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
 
-            var tooltipTriggerList =
-                [].slice.call(
-                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                );
+            const departmentDropdown =
+                document.getElementById("Department");
 
-            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+            const gradeDropdown =
+                document.getElementById("GradeLevel");
 
-                new bootstrap.Tooltip(tooltipTriggerEl);
+            const sectionInput =
+                document.getElementById("SectionName");
+
+            const adviserDropdown =
+                document.getElementById("AdviserID");
+
+            const previousAdviserMessage =
+                document.getElementById("previousAdviserMessage");
+
+            // Store all original grade options.
+            const allGrades = Array.from(gradeDropdown.options)
+                .filter(option => option.value !== "")
+                .map(option => ({
+                    value: option.value,
+                    text: option.text
+                }));
+
+            // Get department name from its value or displayed text.
+            function getDepartmentName() {
+
+                const selectedOption =
+                    departmentDropdown.options[
+                    departmentDropdown.selectedIndex
+                    ];
+
+                if (!selectedOption || !selectedOption.value) {
+                    return "";
+                }
+
+                const value = selectedOption.value.trim().toUpperCase();
+                const text = selectedOption.text.trim().toUpperCase();
+
+                if (value === "JHS" || text === "JHS") {
+                    return "JHS";
+                }
+
+                if (value === "SHS" || text === "SHS") {
+                    return "SHS";
+                }
+
+                // Supports numeric enum values:
+                // JHS = 0, SHS = 1
+                if (value === "0") {
+                    return "JHS";
+                }
+
+                if (value === "1") {
+                    return "SHS";
+                }
+
+                return "";
+            }
+
+            // =====================================
+            // FILTER GRADE LEVELS
+            // =====================================
+
+            function filterGradeLevels(resetGrade) {
+
+                const department = getDepartmentName();
+
+                const previousGrade = resetGrade
+                    ? ""
+                    : gradeDropdown.value;
+
+                // Clear existing options.
+                gradeDropdown.innerHTML = "";
+
+                // Add default option.
+                const defaultOption =
+                    document.createElement("option");
+
+                defaultOption.value = "";
+                defaultOption.textContent = "Select Grade Level";
+
+                gradeDropdown.appendChild(defaultOption);
+
+                // No department selected.
+                if (!department) {
+
+                    gradeDropdown.disabled = true;
+
+                    return;
+                }
+
+                gradeDropdown.disabled = false;
+
+                // Add only allowed grades.
+                allGrades.forEach(function(item) {
+
+                    const grade = parseInt(item.value, 10);
+
+                    let allowed = false;
+
+                    if (department === "JHS") {
+                        allowed = grade >= 7 && grade <= 10;
+                    }
+
+                    if (department === "SHS") {
+                        allowed = grade >= 11 && grade <= 12;
+                    }
+
+                    if (allowed) {
+
+                        const option =
+                            document.createElement("option");
+
+                        option.value = item.value;
+                        option.textContent = item.text;
+
+                        gradeDropdown.appendChild(option);
+                    }
+
+                });
+
+                // Restore previous grade if still available.
+                if (previousGrade) {
+
+                    const gradeExists =
+                        Array.from(gradeDropdown.options)
+                            .some(option =>
+                                option.value === previousGrade
+                            );
+
+                    if (gradeExists) {
+                        gradeDropdown.value = previousGrade;
+                    }
+                }
+            }
+
+            // =====================================
+            // DEPARTMENT CHANGE
+            // =====================================
+
+            departmentDropdown.addEventListener("change", function() {
+
+                filterGradeLevels(true);
+
+                adviserDropdown.value = "";
+
+                previousAdviserMessage.style.display = "none";
+                previousAdviserMessage.textContent = "";
 
             });
 
-        });
-            $(document).ready(function () {
+            // Apply filtering when page loads.
+            filterGradeLevels(false);
 
-            function getPreviousAdviser() {
+            // =====================================
+            // PREVIOUS ADVISER
+            // =====================================
 
-                var department = $("#Department").val();
-                var gradeLevel = $("#GradeLevel").val();
-                var sectionName = $("#SectionName").val().trim();
+            async function getPreviousAdviser() {
 
-                var adviserDropdown = $("#AdviserID");
-                var message = $("#previousAdviserMessage");
+                const department = departmentDropdown.value;
 
-                message.hide().text("");
+                const gradeLevel = gradeDropdown.value;
+
+                const sectionName = sectionInput.value.trim();
+
+                previousAdviserMessage.style.display = "none";
+                previousAdviserMessage.textContent = "";
 
                 if (!department || !gradeLevel || !sectionName) {
                     return;
                 }
 
-                $.get('@Url.Action("GetPreviousAdviser", "Class")', {
-                    department: department,
-                    gradeLevel: gradeLevel,
-                    sectionName: sectionName
-                }, function (response) {
+                const url = new URL(
+                    '@Url.Action("GetPreviousAdviser", "Class")',
+                    window.location.origin
+                );
 
-                    if (response.found) {
+                url.searchParams.append("department", department);
+                url.searchParams.append("gradeLevel", gradeLevel);
+                url.searchParams.append("sectionName", sectionName);
 
-                        var adviserExists = adviserDropdown.find(
-                            "option[value='" + response.adviserID + "']"
-                        ).length > 0;
+                try {
+
+                    const response = await fetch(url);
+
+                    if (!response.ok) {
+                        return;
+                    }
+
+                    const data = await response.json();
+
+                    if (data.found) {
+
+                        const adviserExists =
+                            Array.from(adviserDropdown.options)
+                                .some(option =>
+                                    option.value == data.adviserID
+                                );
 
                         if (adviserExists) {
-                            adviserDropdown.val(response.adviserID);
 
-                            message.text(
+                            adviserDropdown.value = data.adviserID;
+
+                            previousAdviserMessage.textContent =
                                 "Suggested previous adviser: " +
-                                response.adviserName +
-                                " (SY " + response.previousYear + "). " +
-                                "You may change this selection."
-                            ).show();
+                                data.adviserName +
+                                " (SY " +
+                                data.previousYear +
+                                "). You may change this selection.";
+
+                            previousAdviserMessage.style.display = "block";
                         }
                     }
-                });
+
+                } catch (error) {
+
+                    console.error(
+                        "Error retrieving previous adviser:",
+                        error
+                    );
+
+                }
             }
 
-            $("#Department, #GradeLevel").on("change", getPreviousAdviser);
+            // =====================================
+            // GRADE LEVEL CHANGE
+            // =====================================
 
-            $("#SectionName").on("blur", getPreviousAdviser);
+            gradeDropdown.addEventListener("change", function() {
 
-            $("#AdviserID").on("change", function () {
-                $("#previousAdviserMessage").hide();
+                getPreviousAdviser();
+
+            });
+
+            // =====================================
+            // SECTION NAME CHANGE
+            // =====================================
+
+            sectionInput.addEventListener("blur", function() {
+
+                getPreviousAdviser();
+
+            });
+
+            // =====================================
+            // ADVISER CHANGE
+            // =====================================
+
+            adviserDropdown.addEventListener("change", function() {
+
+                previousAdviserMessage.style.display = "none";
+
             });
 
         });
-
     </script>
-
 }

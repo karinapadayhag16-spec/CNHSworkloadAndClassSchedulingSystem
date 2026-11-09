@@ -1,0 +1,81 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model CNHSworkloadAndClassSchedulingSystem.Models.Domain.ApplicationUser
+
+@{
+    ViewData["Title"] = "View User";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2 class="fw-bold">User Details</h2>
+
+    
+
+    </div>
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0 fw-bold">User Information</h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">First Name:</div>
+                <div class="col-md-8">@Model.FirstName</div>
+            </div>
+
+            <hr />
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Last Name:</div>
+                <div class="col-md-8">@Model.LastName</div>
+            </div>
+
+            <hr />
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Username:</div>
+                <div class="col-md-8">@Model.UserName</div>
+            </div>
+
+            <hr />
+
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Status:</div>
+                <div class="col-md-8">
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactive</span>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-footer text-end">
+
+            <a asp-controller="UserSetting"
+               asp-action="Index"
+               class="btn btn-secondary">
+                Close
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

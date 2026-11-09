@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection>
+﻿
+@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.ClassSection>
 
 @{
     ViewData["Title"] = "Class";
@@ -67,19 +68,12 @@
         <thead class="table-dark">
 
             <tr>
-
                 <th width="80">#</th>
-
                 <th>Department</th>
-
                 <th>Grade Level</th>
-
                 <th>Section</th>
-
                 <th>Adviser</th>
-
                 <th width="150">Actions</th>
-
             </tr>
 
         </thead>
@@ -94,7 +88,7 @@
             {
                 @foreach (var classSection in Model)
                 {
-                    <tr>
+                    <tr class="@(classSection.Adviser == null ? "table-warning" : "")">
 
                         <td>
                             @count
@@ -123,7 +117,7 @@
                             }
                             else
                             {
-                                <span class="text-warning fw-semibold">
+                                <span class="fw-bold text-dark">
                                     No Adviser Assigned
                                 </span>
                             }
@@ -194,3 +188,4 @@
     </script>
 
 }
+```

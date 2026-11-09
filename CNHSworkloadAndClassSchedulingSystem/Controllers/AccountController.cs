@@ -45,17 +45,14 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 {
                     return Redirect(model.ReturnUrl);
                 }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+
+                return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return View(model);
-            }
+
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View(model);
         }
+
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -65,5 +62,10 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             return RedirectToAction("Login", "Account");
         }
 
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return RedirectToAction("AddUsers", "UserSetting");
+        }
     }
 }

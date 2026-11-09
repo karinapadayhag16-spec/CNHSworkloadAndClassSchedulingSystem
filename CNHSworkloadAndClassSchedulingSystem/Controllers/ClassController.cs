@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CNHSworkloadAndClassSchedulingSystem.Data;
 using CNHSworkloadAndClassSchedulingSystem.Models.Domain;
@@ -7,123 +8,149 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using CNHSworkloadAndClassSchedulingSystem.Models.ViewModels;
 
 namespace CNHSworkloadAndClassSchedulingSystem.Controllers
+{
+    public class Class : Controller
     {
-        public class Class : Controller
+        private readonly ApplicationDbContext _context;
+
+        public Class(ApplicationDbContext context)
         {
-            private readonly ApplicationDbContext _context;
+            _context = context;
+        }
 
-            public Class(ApplicationDbContext context)
-            {
-                _context = context;
-            }
-            private async Task PopulateClassDropdowns(ClassViewModel model)
-            {
-                // School Years
-                model.SchoolYears = await _context.SchoolYears
-                    .OrderByDescending(sy => sy.YearLabel)
-                    .Select(sy => new SelectListItem
-                    {
-                        Value = sy.SchoolYearId.ToString(),
-                        Text = sy.YearLabel
-                    })
-                    .ToListAsync();
+        // =========================================
+        // POPULATE CLASS DROPDOWNS
+        // =========================================
 
-                // Departments
-                model.Departments = Enum.GetValues<Department>()
-                    .Select(d => new SelectListItem
-                    {
-                        Value = ((int)d).ToString(),
-                        Text = d.ToString()
-                    })
-                    .ToList();
-
-                // Grade Levels
-                model.GradeLevels = Enumerable.Range(7, 6)
-                    .Select(grade => new SelectListItem
-                    {
-                        Value = grade.ToString(),
-                        Text = $"Grade {grade}"
-                    })
-                    .ToList();
-
-                // Advisers for the selected School Year
-                model.Advisers = await _context.Teachers
-                    .Where(t => t.SchoolYearID == model.SchoolYearID)
-                    .OrderBy(t => t.LastName)
-                    .ThenBy(t => t.FirstName)
-                    .Select(t => new SelectListItem
-                    {
-                        Value = t.TeacherID.ToString(),
-                        Text = t.LastName + ", " + t.FirstName
-                    })
-                    .ToListAsync();
-            }
-            private async Task<ClassSection?> GetPreviousClassSection(ClassViewModel model,SchoolYear activeSchoolYear)
+        private async Task PopulateClassDropdowns(ClassViewModel model)
+        {
+            // School Years
+            model.SchoolYears = await _context.SchoolYears
+                .OrderByDescending(sy => sy.YearLabel)
+                .Select(sy => new SelectListItem
                 {
-                    // Extract the starting year from the active school year label
-                    string[] years = activeSchoolYear.YearLabel!.Split('-');
+                    Value = sy.SchoolYearId.ToString(),
+                    Text = sy.YearLabel
+                })
+                .ToListAsync();
 
-                    if (years.Length != 2 ||
-                        !int.TryParse(years[0], out int currentStartYear))
-                    {
-                        return null;
-                    }
+            // Departments
+            // Use enum names as dropdown values
+            model.Departments = Enum.GetValues<Department>()
+                .Select(d => new SelectListItem
+                {
+                    Value = d.ToString(),
+                    Text = d.ToString()
+                })
+                .ToList();
 
-                    // Determine the previous school year label
-                    string previousYearLabel =
-                        $"{currentStartYear - 1}-{currentStartYear}";
+            // Grade Levels
+            model.GradeLevels = Enumerable.Range(7, 6)
+                .Select(grade => new SelectListItem
+                {
+                    Value = grade.ToString(),
+                    Text = $"Grade {grade}"
+                })
+                .ToList();
 
-                    // Find the previous school year
-                    var previousSchoolYear = await _context.SchoolYears
-                        .FirstOrDefaultAsync(sy =>
-                            sy.YearLabel == previousYearLabel);
+            // Advisers for the selected School Year
+            model.Advisers = await _context.Teachers
+                .Where(t => t.SchoolYearID == model.SchoolYearID)
+                .OrderBy(t => t.LastName)
+                .ThenBy(t => t.FirstName)
+                .Select(t => new SelectListItem
+                {
+                    Value = t.TeacherID.ToString(),
+                    Text = t.LastName + ", " + t.FirstName
+                })
+                .ToListAsync();
+        }
 
-                    if (previousSchoolYear == null)
-                        return null;
+        // =========================================
+        // GET PREVIOUS CLASS SECTION
+        // =========================================
 
-                    // Find the matching previous class section
-                    return await _context.ClassSections
-                        .Include(cs => cs.Adviser)
-                        .FirstOrDefaultAsync(cs =>
-                            cs.SchoolYearID == previousSchoolYear.SchoolYearId &&
-                            cs.Department == model.Department &&
-                            cs.GradeLevel == model.GradeLevel &&
-                            cs.SectionName == model.SectionName);
-                }
+        private async Task<ClassSection?> GetPreviousClassSection(
+            ClassViewModel model,
+            SchoolYear activeSchoolYear)
+        {
+            // Extract the starting year
+            string[] years = activeSchoolYear.YearLabel!.Split('-');
 
-        // GET: Classes
+            if (years.Length != 2 ||
+                !int.TryParse(years[0], out int currentStartYear))
+            {
+                return null;
+            }
+
+            // Determine the previous school year
+            string previousYearLabel =
+                $"{currentStartYear - 1}-{currentStartYear}";
+
+            // Find the previous school year
+            var previousSchoolYear = await _context.SchoolYears
+                .FirstOrDefaultAsync(sy =>
+                    sy.YearLabel == previousYearLabel);
+
+            if (previousSchoolYear == null)
+                return null;
+
+            // Find the matching previous class section
+            return await _context.ClassSections
+                .Include(cs => cs.Adviser)
+                .FirstOrDefaultAsync(cs =>
+                    cs.SchoolYearID == previousSchoolYear.SchoolYearId &&
+                    cs.Department == model.Department &&
+                    cs.GradeLevel == model.GradeLevel &&
+                    cs.SectionName == model.SectionName);
+        }
+
+        // =========================================
+        // INDEX
+        // =========================================
+
         public async Task<IActionResult> Index()
+        {
+            var activeSchoolYear = await _context.SchoolYears
+                .FirstOrDefaultAsync(sy =>
+                    sy.Status == SchoolYearStatus.Active);
+
+            if (activeSchoolYear == null)
             {
-                var activeSchoolYear = await _context.SchoolYears
-                    .FirstOrDefaultAsync(sy =>
-                        sy.Status == SchoolYearStatus.Active);
+                TempData["ErrorMessage"] =
+                    "There is no active school year.";
 
-                if (activeSchoolYear == null)
-                {
-                    TempData["ErrorMessage"] =
-                        "There is no active school year.";
-
-                    return View(new List<ClassSection>());
-                }
-
-                var classes = await _context.ClassSections
-                    .Include(cs => cs.Adviser)
-                    .Include(cs => cs.SchoolYear)
-                    .Where(cs =>
-                        cs.SchoolYearID == activeSchoolYear.SchoolYearId)
-                    .OrderBy(cs => cs.Department)
-                    .ThenBy(cs => cs.GradeLevel)
-                    .ThenBy(cs => cs.SectionName)
-                    .ToListAsync();
-
-                ViewBag.ActiveSchoolYear = activeSchoolYear.YearLabel;
-
-                return View(classes);
+                return View(new List<ClassSection>());
             }
+
+            var classes = await _context.ClassSections
+                .Include(cs => cs.Adviser)
+                .Include(cs => cs.SchoolYear)
+                .Where(cs =>
+                    cs.SchoolYearID == activeSchoolYear.SchoolYearId)
+                .OrderBy(cs => cs.Department)
+                .ThenBy(cs => cs.GradeLevel)
+                .ThenBy(cs => cs.SectionName)
+                .ToListAsync();
+
+            ViewBag.ActiveSchoolYear = activeSchoolYear.YearLabel;
+
+            return View(classes);
+        }
+
+        // =========================================
+        // GET PREVIOUS ADVISER
+        // =========================================
+
         [HttpGet]
         public async Task<IActionResult> GetPreviousAdviser(
-            Department department, int gradeLevel, string sectionName)
+            Department department,
+            int gradeLevel,
+            string sectionName)
         {
+            if (string.IsNullOrWhiteSpace(sectionName))
+                return Json(new { found = false });
+
             var activeSchoolYear = await _context.SchoolYears
                 .FirstOrDefaultAsync(sy =>
                     sy.Status == SchoolYearStatus.Active);
@@ -167,11 +194,17 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             {
                 found = true,
                 adviserID = previousClass.AdviserID,
-                adviserName = $"{previousClass.Adviser.FirstName} {previousClass.Adviser.LastName}",
+                adviserName =
+                    $"{previousClass.Adviser.FirstName} {previousClass.Adviser.LastName}",
                 previousSectionID = previousClass.ClassSectionID,
                 previousYear = previousSchoolYear.YearLabel
             });
         }
+
+        // =========================================
+        // ADD CLASS - GET
+        // =========================================
+
         [HttpGet]
         public async Task<IActionResult> AddClass()
         {
@@ -197,6 +230,10 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             return View(model);
         }
 
+        // =========================================
+        // ADD CLASS - POST
+        // =========================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddClass(ClassViewModel model)
@@ -205,9 +242,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             var activeSchoolYear = await _context.SchoolYears
                 .FirstOrDefaultAsync(sy =>
                     sy.Status == SchoolYearStatus.Active);
-            var previousClass = await GetPreviousClassSection(
-                model,
-                activeSchoolYear);
+
             if (activeSchoolYear == null)
             {
                 TempData["ErrorMessage"] =
@@ -219,6 +254,28 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             // Only allow adding classes to the active school year
             model.SchoolYearID = activeSchoolYear.SchoolYearId;
 
+            // Validate department and grade level
+            if (model.Department.HasValue)
+            {
+                string department = model.Department.Value.ToString();
+
+                if (department == "JHS" &&
+                    (model.GradeLevel < 7 || model.GradeLevel > 10))
+                {
+                    ModelState.AddModelError(
+                        "GradeLevel",
+                        "JHS only allows Grade 7 to Grade 10.");
+                }
+                else if (department == "SHS" &&
+                         (model.GradeLevel < 11 || model.GradeLevel > 12))
+                {
+                    ModelState.AddModelError(
+                        "GradeLevel",
+                        "SHS only allows Grade 11 and Grade 12.");
+                }
+            }
+
+            // Validate adviser
             if (model.AdviserID.HasValue)
             {
                 var adviserExists = await _context.Teachers
@@ -261,6 +318,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 return View(model);
             }
 
+            // Get previous class section
+            var previousClass = await GetPreviousClassSection(
+                model,
+                activeSchoolYear);
+
             // Create the class section
             var classSection = new ClassSection
             {
@@ -281,6 +343,10 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        // =========================================
+        // EDIT CLASS - GET
+        // =========================================
 
         [HttpGet]
         public async Task<IActionResult> EditClass(int id)
@@ -333,6 +399,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             return View(model);
         }
+
+        // =========================================
+        // EDIT CLASS - POST
+        // =========================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditClass(ClassViewModel model)
@@ -344,7 +415,9 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             if (activeSchoolYear == null)
             {
-                TempData["ErrorMessage"] = "There is no active school year.";
+                TempData["ErrorMessage"] =
+                    "There is no active school year.";
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -368,6 +441,27 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             }
 
             model.SchoolYearID = classSection.SchoolYearID;
+
+            // Validate department and grade level
+            if (model.Department.HasValue)
+            {
+                string department = model.Department.Value.ToString();
+
+                if (department == "JHS" &&
+                    (model.GradeLevel < 7 || model.GradeLevel > 10))
+                {
+                    ModelState.AddModelError(
+                        "GradeLevel",
+                        "JHS only allows Grade 7 to Grade 10.");
+                }
+                else if (department == "SHS" &&
+                         (model.GradeLevel < 11 || model.GradeLevel > 12))
+                {
+                    ModelState.AddModelError(
+                        "GradeLevel",
+                        "SHS only allows Grade 11 and Grade 12.");
+                }
+            }
 
             // Validate adviser if one is selected
             if (model.AdviserID.HasValue)

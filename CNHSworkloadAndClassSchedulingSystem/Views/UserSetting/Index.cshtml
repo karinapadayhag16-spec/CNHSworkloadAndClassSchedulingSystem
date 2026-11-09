@@ -1,8 +1,5 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.ApplicationUser>
+
 @{
     ViewData["Title"] = "User Setting";
 }
@@ -10,34 +7,137 @@
 <div class="container-fluid mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="fw-bold mb-4">
-        <i class="bi bi-gear me-2"></i> User Setting
-    </h3>
 
-    <div class="mb-3">
+        <h3 class="fw-bold mb-4">
+            <i class="bi bi-gear me-2"></i> User Setting
+        </h3>
 
-        <a asp-controller="UserSetting"
-           asp-action="AddUsers"
-           class="btn btn-primary"
-           data-bs-toggle="tooltip"
-           data-bs-placement="top"
-           title="Add a new User">
+        <div class="mb-3">
+            <a asp-controller="UserSetting"
+               asp-action="AddUsers"
+               class="btn btn-primary"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Add a new User">
 
-            <i class="bi bi-plus-circle"></i>
-            Add User
+                <i class="bi bi-plus-circle"></i>
+                Add User
 
-        </a>
+            </a>
         </div>
+
     </div>
 
-    <table class="table table-striped table-bordered align-middle">
-        <thead class="table-dark">
-            <tr>
-                <th>#</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th style="width:150px;">Action</th>
-            </tr>
-        </thead>
-    </table>
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @successMessage
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="table-responsive">
+
+        <table class="table table-striped table-bordered align-middle">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Status</th>
+                    <th style="width: 220px;">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    var number = 1;
+
+                    foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@number</td>
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.UserName</td>
+
+                            <td>
+                                @if (user.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactive</span>
+                                }
+                            </td>
+
+                            <td>
+                                <!-- VIEW BUTTON -->
+                                <a asp-controller="UserSetting"
+                                   asp-action="ViewUser"
+                                   asp-route-id="@user.Id"
+                                   class="btn btn-info btn-sm text-white">
+
+                                    <i class="bi bi-eye"></i>
+                                    View
+
+                                </a>
+
+                                <!-- EDIT BUTTON -->
+                                <a asp-controller="UserSetting"
+                                   asp-action="EditUser"
+                                   asp-route-id="@user.Id"
+                                   class="btn btn-warning btn-sm">
+
+                                    <i class="bi bi-pencil-square"></i>
+                                    Edit
+
+                                </a>
+
+                                
+                                <!-- DELETE BUTTON -->
+                                <form asp-controller="UserSetting"
+                                      asp-action="DeleteUser"
+                                      asp-route-id="@user.Id"
+                                      method="post"
+                                      class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to delete this user?');">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            title="Delete User">
+                                        <i class="bi bi-trash"></i>
+                                        Delete
+                                    </button>
+
+                                </form>
+                            </td>
+                        </tr>
+
+                        number++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            No users found.
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
 </div>
