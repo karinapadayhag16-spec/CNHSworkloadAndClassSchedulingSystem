@@ -1,22 +1,17 @@
-﻿using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
-using System.Reflection;
+﻿using CNHSworkloadAndClassSchedulingSystem.Models.Domain;
+using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
 
-namespace CNHSworkloadAndClassSchedulingSystem.Models.Domain
+public class Teacher
 {
-    public class Teacher
-    {
-        public int TeacherID { get; set; }
+    public int TeacherID { get; set; }
 
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
 
-        public Department Department { get; set; }
+    public Department Department { get; set; }
 
-        public int SchoolYearID { get; set; }
-        public SchoolYear SchoolYear { get; set; }
+    public bool IsArchived { get; set; } = false;
 
-        public ICollection<TeacherExpertise> SubjectExpertise { get; set; }
-            = new List<TeacherExpertise>();
-
-    }
+    public ICollection<TeacherExpertise> SubjectExpertise { get; set; }
+        = new List<TeacherExpertise>();
 }

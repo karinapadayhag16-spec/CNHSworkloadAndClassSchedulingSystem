@@ -1,8 +1,6 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿
+@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.TeacherViewModel
+
 @{
     ViewData["Title"] = "Add Teacher";
 }
@@ -18,51 +16,72 @@
                 <div class="card-header bg-primary">
 
                     <h3 class="mb-0 fw-bold text-white">
-
                         <i class="bi bi-plus-circle"></i>
                         Add Teacher
-
                     </h3>
 
                 </div>
 
                 <div class="card-body p-4">
 
-                    <form>
+                    <form asp-controller="Teacher"
+                          asp-action="AddTeacher"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="SchoolYearID" />
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+                                School Year
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   value="@ViewBag.ActiveSchoolYear"
+                                   readonly />
+
+                        </div>
 
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label fw-bold">
-                                    Full Name
+                                <label asp-for="FirstName"
+                                       class="form-label fw-bold">
+                                    First Name
                                 </label>
 
-                                <input type="text"
+                                <input asp-for="FirstName"
                                        class="form-control"
-                                       placeholder="Enter teacher name"
+                                       placeholder="Enter first name"
                                        data-bs-toggle="tooltip"
                                        data-bs-placement="right"
-                                       title="Enter the teacher's full name" />
+                                       title="Enter the teacher's first name" />
+
+                                <span asp-validation-for="FirstName"
+                                      class="text-danger"></span>
 
                             </div>
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label fw-bold">
-                                    Sex
+                                <label asp-for="LastName"
+                                       class="form-label fw-bold">
+                                    Last Name
                                 </label>
 
-                                <select class="form-select"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="right"
-                                        title="Select teacher sex">
+                                <input asp-for="LastName"
+                                       class="form-control"
+                                       placeholder="Enter last name"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="right"
+                                       title="Enter the teacher's last name" />
 
-                                    <option>Select Sex</option>
-                                    <option>Male</option>
-                                    <option>Female</option>
-
-                                </select>
+                                <span asp-validation-for="LastName"
+                                      class="text-danger"></span>
 
                             </div>
 
@@ -72,53 +91,26 @@
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label fw-bold">
+                                <label asp-for="Department"
+                                       class="form-label fw-bold">
                                     Department
                                 </label>
 
-                                <select class="form-select"
+                                <select asp-for="Department"
+                                        asp-items="Model.Departments"
+                                        class="form-select"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="right"
-                                        title="Select the department">
+                                        title="Select the teacher's department">
 
-                                    <option>Select Department</option>
-                                    <option>JHS</option>
-                                    <option>SHS</option>
+                                    <option value="">Select Department</option>
 
                                 </select>
 
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label fw-bold">
-                                    Expertise
-                                </label>
-
-                                <input type="text"
-                                       class="form-control"
-                                       placeholder="e.g. Mathematics"
-                                       data-bs-toggle="tooltip"
-                                       data-bs-placement="right"
-                                       title="Enter teacher expertise" />
+                                <span asp-validation-for="Department"
+                                      class="text-danger"></span>
 
                             </div>
-
-                        </div>
-
-                        <div class="mb-4">
-
-                            <label class="form-label fw-bold">
-                                Actual Teaching Load
-                            </label>
-
-                            <input type="number"
-                                   class="form-control"
-                                   style="max-width:500px;"
-                                   placeholder="e.g. 24"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="right"
-                                   title="Enter the teacher's actual teaching load" />
 
                         </div>
 
@@ -164,6 +156,10 @@
 </div>
 
 @section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
     <script>
 

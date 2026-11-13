@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher>
+@{
     ViewData["Title"] = "Teachers";
 }
 
@@ -27,40 +28,62 @@
     <table class="table table-bordered table-hover text-center">
 
         <thead class="table-dark">
-
             <tr>
-
                 <th width="80">#</th>
-
                 <th>Name</th>
-
-                <th>Sex</th>
-
                 <th>Department</th>
-
                 <th>Expertise</th>
-
                 <th>Actual Teaching Load</th>
-
                 <th width="220">Actions</th>
-
             </tr>
-
         </thead>
 
         <tbody>
+            @if (Model != null && Model.Any())
+            {
+                int counter = 1;
 
-            <tr>
+                @foreach (var teacher in Model)
+                {
+                    <tr>
+                        <td>@counter</td>
 
-                <td colspan="7"
-                    class="text-muted py-4">
+                        <td>
+                            @teacher.LastName, @teacher.FirstName
+                        </td>
 
-                    No teachers have been added yet.
+                        <td>@teacher.Department</td>
 
-                </td>
+                        <td>
+                            -
+                        </td>
 
-            </tr>
+                        <td>
+                            -
+                        </td>
 
+                        <td>
+                            <a asp-controller="Teacher"
+                               asp-action="EditTeacher"
+                               asp-route-id="@teacher.TeacherID"
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+
+                    counter++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-muted py-4">
+                        No teachers have been added yet.
+                    </td>
+                </tr>
+            }
         </tbody>
 
     </table>
