@@ -17,11 +17,15 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             _context = context;
         }
 
+        // ==========================================
         // GET: TimeSched
+        // ACTIVE SCHEDULES ONLY
+        // ==========================================
         public async Task<IActionResult> Index()
         {
             var schedules = await _context.TimeSchedules
                 .Include(ts => ts.TimePeriods)
+                .Where(ts => !ts.IsArchived)
                 .OrderBy(ts => ts.ScheduleName)
                 .ThenByDescending(ts => ts.VersionNumber)
                 .ToListAsync();
@@ -29,7 +33,10 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             return View(schedules);
         }
 
+
+        // ==========================================
         // GET: TimeSched/AddSchedule
+        // ==========================================
         [HttpGet]
         public IActionResult AddSchedule()
         {
@@ -43,7 +50,10 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             return View(model);
         }
 
+
+        // ==========================================
         // POST: TimeSched/AddSchedule
+        // ==========================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddSchedule(
@@ -129,7 +139,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+        // ==========================================
         // GET: TimeSched/ViewSchedule/5
+        // ==========================================
         [HttpGet]
         public async Task<IActionResult> ViewSchedule(int id)
         {
@@ -144,7 +158,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             return View(schedule);
         }
+
+
+        // ==========================================
         // GET: TimeSched/EditSchedule/5
+        // ==========================================
         [HttpGet]
         public async Task<IActionResult> EditSchedule(int id)
         {
@@ -182,11 +200,16 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                     })
                     .ToList()
             };
+
             ViewBag.TimeScheduleId = schedule.TimeScheduleId;
+
             return View(model);
         }
 
+
+        // ==========================================
         // POST: TimeSched/EditSchedule/5
+        // ==========================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditSchedule(
@@ -351,6 +374,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                             "because it is currently used in a class timetable.");
 
                         await transaction.RollbackAsync();
+
                         return View(model);
                     }
 
@@ -364,6 +388,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                             "in a class timetable.");
 
                         await transaction.RollbackAsync();
+
                         return View(model);
                     }
                 }
@@ -448,7 +473,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 throw;
             }
         }
+
+
+        // ==========================================
         // GET: TimeSched/EditDetails/5
+        // ==========================================
         [HttpGet]
         public async Task<IActionResult> EditDetails(int id)
         {
@@ -478,7 +507,9 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
         }
 
 
+        // ==========================================
         // POST: TimeSched/EditDetails/5
+        // ==========================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditDetails(
@@ -516,13 +547,60 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult ArchivedSchedule()
+
+
+        // ==========================================
+        // GET: TimeSched/ArchivedSchedule
+        // ARCHIVED SCHEDULES ONLY
+        // ==========================================
+        [HttpGet]
+        public async Task<IActionResult> ArchivedSchedule()
         {
-            var archivedSchedules = _context.TimeSchedules
-                .Where(x => x.IsArchived)
-                .ToList();
+            var archivedSchedules = await _context.TimeSchedules
+                .Include(ts => ts.TimePeriods)
+                .Where(ts => ts.IsArchived)
+                .OrderBy(ts => ts.ScheduleName)
+                .ThenByDescending(ts => ts.VersionNumber)
+                .ToListAsync();
 
             return View(archivedSchedules);
+        }
+
+
+        // ==========================================
+        // POST: TimeSched/DeleteSchedule/5
+        // ==========================================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteSchedule(int id)
+        {
+            var schedule = await _context.TimeSchedules
+                .FirstOrDefaultAsync(ts => ts.TimeScheduleId == id);
+
+            if (schedule == null)
+            {
+                TempData["ErrorMessage"] =
+                    "Time schedule was not found.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                _context.TimeSchedules.Remove(schedule);
+
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] =
+                    "Time schedule deleted successfully.";
+            }
+            catch (DbUpdateException)
+            {
+                TempData["ErrorMessage"] =
+                    "This time schedule cannot be deleted because it is being used by another record.";
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

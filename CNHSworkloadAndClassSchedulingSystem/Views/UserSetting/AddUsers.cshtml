@@ -1,4 +1,4 @@
-﻿cshtml
+﻿
 @model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.RegisterViewModel
 
 @{
@@ -24,10 +24,13 @@
 
                 <div class="card-body p-4">
 
-                    <form asp-controller="AdminUser"
+                    <form asp-controller="UserSetting"
                           asp-action="Register"
                           method="post"
                           id="registerForm">
+
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <div class="row">
 
@@ -116,7 +119,17 @@
                             <span asp-validation-for="Password"
                                   class="text-danger"></span>
 
-                           
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" asp-for="ConfirmPassword"></label>
+                            <input type="password"
+                                   class="form-control"
+                                   asp-for="ConfirmPassword"
+                                   placeholder="Confirm password"
+                                   required />
+                            <span asp-validation-for="ConfirmPassword"
+                                  class="text-danger"></span>
 
                         </div>
 
@@ -134,8 +147,8 @@
 
                             </button>
 
-                            <a asp-controller="AdminUser"
-                               asp-action="ViewUsers"
+                            <a asp-controller="UserSetting"
+                               asp-action="Index"
                                class="btn btn-secondary"
                                data-bs-toggle="tooltip"
                                title="Return to user list">
