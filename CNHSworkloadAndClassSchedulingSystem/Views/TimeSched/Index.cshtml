@@ -1,28 +1,45 @@
-﻿@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.ApplicationUser>
+﻿@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.TimeSchedule>
 
 @{
-    ViewData["Title"] = "User Setting";
+    ViewData["Title"] = "Time Schedules";
 }
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
 
+    <!-- PAGE HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <h2 class="fw-bold">
-            User Setting Management
-        </h2>
+        <h3 class="fw-bold mb-0">
+            <i class="bi bi-clock me-2"></i>
+            Time Schedules
+        </h3>
 
+        <!-- ACTION BUTTONS -->
         <div class="d-flex gap-2">
 
-            <a asp-controller="UserSetting"
-               asp-action="AddUsers"
-               class="btn btn-primary"
+            <!-- ARCHIVED SCHEDULES BUTTON -->
+            <a asp-controller="TimeSched"
+               asp-action="ArchivedSchedule"
+               class="btn btn-secondary fw-bold px-4 py-2"
                data-bs-toggle="tooltip"
                data-bs-placement="top"
-               title="Add a new User">
+               title="View archived schedules">
 
-                <i class="bi bi-plus-circle"></i>
-                Add User
+                <i class="bi bi-archive me-2"></i>
+                Archived Schedules
+
+            </a>
+
+            <!-- ADD SCHEDULE BUTTON -->
+            <a asp-controller="TimeSched"
+               asp-action="AddSchedule"
+               class="btn btn-primary fw-bold px-4 py-2"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Add a new Time Schedule">
+
+                <i class="bi bi-plus-circle me-2"></i>
+                Add Schedule
 
             </a>
 
@@ -30,158 +47,321 @@
 
     </div>
 
+
+    <!-- SUCCESS MESSAGE -->
     @if (TempData["SuccessMessage"] is string successMessage)
     {
-        <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
             @successMessage
 
             <button type="button"
                     class="btn-close"
                     data-bs-dismiss="alert">
             </button>
+
         </div>
     }
 
-    <table class="table table-bordered table-hover text-center">
 
-        <thead class="table-dark">
+    <!-- ERROR MESSAGE -->
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
 
-            <tr>
-                <th width="60">#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-                <th width="120">Status</th>
-                <th width="320">Actions</th>
-            </tr>
+            <i class="bi bi-exclamation-circle me-2"></i>
+            @errorMessage
 
-        </thead>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
 
-        <tbody>
+        </div>
+    }
 
-            @{
-                int count = 1;
-            }
 
-            @if (Model != null && Model.Any())
-            {
-                @foreach (var user in Model)
+    <!-- TIME SCHEDULE TABLE -->
+    <div class="table-responsive">
+
+        <table class="table table-striped table-bordered align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+                    <th>#</th>
+                    <th>Schedule Name</th>
+                    <th>Description</th>
+                    <th>Version</th>
+                    <th>Periods</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th class="text-center" style="width: 310px;">
+                        Actions
+                    </th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
                 {
-                    <tr>
+                    var number = 1;
 
-                        <td>@count</td>
+                    foreach (var schedule in Model)
+                    {
+                        <tr>
 
-                        <td class="fw-semibold">
-                            @user.FirstName
-                        </td>
+                            <td>@number</td>
 
-                        <td class="fw-semibold">
-                            @user.LastName
-                        </td>
+                            <td>
+                                @schedule.ScheduleName
+                            </td>
 
-                        <td>
-                            @user.UserName
-                        </td>
+                            <td>
+                                @(string.IsNullOrWhiteSpace(schedule.Description)
+                                    ? "-"
+                                    : schedule.Description)
+                            </td>
 
-                        <td>
+                            <td>
+                                Version @schedule.VersionNumber
+                            </td>
 
-                            @if (user.IsActive)
-                            {
-                                <span class="badge bg-success">
-                                    Active
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">
-                                    Inactive
-                                </span>
-                            }
+                            <td>
+                                @schedule.TimePeriods.Count
+                            </td>
 
-                        </td>
+                            <td>
 
-                        <td style="white-space: nowrap;">
+                                @if (schedule.IsArchived)
+                                {
+                                    <span class="badge bg-secondary">
+                                        Archived
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+                                        Available
+                                    </span>
+                                }
 
-                            <div class="d-flex justify-content-center align-items-center gap-2 flex-nowrap">
+                            </td>
 
-                                <!-- VIEW -->
-                                <a asp-controller="UserSetting"
-                                   asp-action="ViewUser"
-                                   asp-route-id="@user.Id"
-                                   class="btn btn-info btn-sm text-white"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="View user details">
+                            <td>
+                                @schedule.CreatedAt.ToLocalTime().ToString("MMM dd, yyyy")
+                            </td>
 
-                                    <i class="bi bi-eye"></i>
-                                    View
+                            <!-- ACTION BUTTONS -->
+                            <td>
 
-                                </a>
+                                <div class="d-flex justify-content-center align-items-center gap-2 flex-nowrap">
 
-                                <!-- EDIT -->
-                                <a asp-controller="UserSetting"
-                                   asp-action="EditUser"
-                                   asp-route-id="@user.Id"
-                                   class="btn btn-warning btn-sm"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="Edit user information">
+                                    <!-- VIEW BUTTON -->
+                                    <a asp-controller="TimeSched"
+                                       asp-action="ViewSchedule"
+                                       asp-route-id="@schedule.TimeScheduleId"
+                                       class="btn btn-info btn-sm text-white action-btn"
+                                       data-bs-toggle="tooltip"
+                                       title="View Schedule">
 
-                                    <i class="bi bi-pencil-square"></i>
-                                    Edit
+                                        <i class="bi bi-eye"></i>
+                                        View
 
-                                </a>
+                                    </a>
 
-                                <!-- DELETE -->
-                                <form asp-controller="UserSetting"
-                                      asp-action="DeleteUser"
-                                      asp-route-id="@user.Id"
-                                      method="post"
-                                      class="d-inline"
-                                      onsubmit="return confirm('Are you sure you want to delete this user?');">
 
-                                    @Html.AntiForgeryToken()
+                                    <!-- EDIT BUTTON -->
+                                    @if (!schedule.IsArchived)
+                                    {
+                                        <a asp-controller="TimeSched"
+                                           asp-action="EditSchedule"
+                                           asp-route-id="@schedule.TimeScheduleId"
+                                           class="btn btn-warning btn-sm action-btn"
+                                           data-bs-toggle="tooltip"
+                                           title="Edit Schedule">
 
-                                    <button type="submit"
-                                            class="btn btn-danger btn-sm"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="top"
-                                            title="Delete this user">
+                                            <i class="bi bi-pencil-square"></i>
+                                            Edit
+
+                                        </a>
+                                    }
+
+
+                                    <!-- DELETE BUTTON -->
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm action-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteScheduleModal"
+                                            data-schedule-id="@schedule.TimeScheduleId"
+                                            data-schedule-name="@schedule.ScheduleName"
+                                            title="Delete Schedule">
 
                                         <i class="bi bi-trash"></i>
                                         Delete
 
                                     </button>
 
-                                </form>
+                                </div>
 
-                            </div>
+                            </td>
+
+                        </tr>
+
+                        number++;
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="8"
+                            class="text-center text-muted py-4">
+
+                            <i class="bi bi-calendar-x me-2"></i>
+                            No time schedules have been created yet.
 
                         </td>
 
                     </tr>
-
-                    count++;
                 }
-            }
-            else
-            {
-                <tr>
 
-                    <td colspan="6" class="text-muted py-4">
+            </tbody>
 
-                        No users have been registered yet.
+        </table>
 
-                    </td>
-
-                </tr>
-            }
-
-        </tbody>
-
-    </table>
+    </div>
 
 </div>
+
+
+<!-- DELETE SCHEDULE WARNING MODAL -->
+<div class="modal fade"
+     id="deleteScheduleModal"
+     tabindex="-1"
+     aria-labelledby="deleteScheduleModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content border-danger">
+
+            <!-- MODAL HEADER -->
+            <div class="modal-header bg-danger text-white">
+
+                <h5 class="modal-title"
+                    id="deleteScheduleModalLabel">
+
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    Warning
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <!-- MODAL BODY -->
+            <div class="modal-body">
+
+                <div class="alert alert-danger mb-0">
+
+                    <h6 class="fw-bold">
+                        Are you sure?
+                    </h6>
+
+                    <p class="mb-2">
+                        You are about to delete the following Time Schedule:
+                    </p>
+
+                    <p class="fw-bold mb-2"
+                       id="deleteScheduleName">
+                    </p>
+
+                    <p class="mb-0">
+                        This action will permanently delete this time
+                        schedule and cannot be undone.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- MODAL FOOTER -->
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+                <form asp-controller="TimeSched"
+                      asp-action="DeleteSchedule"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="id"
+                           id="deleteScheduleId" />
+
+                    <button type="submit"
+                            class="btn btn-danger btn-sm"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="Delete this time schedule">
+
+                        <i class="bi bi-trash"></i>
+                        Delete
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CUSTOM CSS -->
+<style>
+
+    /* Symmetrical Action Buttons */
+    .action-btn {
+        width: 90px;
+        height: 34px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 8px;
+        white-space: nowrap;
+    }
+
+    /* Table Alignment */
+    .table td {
+        vertical-align: middle;
+    }
+
+</style>
+
 
 @section Scripts {
 
@@ -189,6 +369,7 @@
 
         document.addEventListener("DOMContentLoaded", function() {
 
+            // ENABLE TOOLTIPS
             var tooltipTriggerList =
                 [].slice.call(
                     document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -197,6 +378,31 @@
             tooltipTriggerList.forEach(function(tooltipTriggerEl) {
 
                 new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+
+            // DELETE SCHEDULE WARNING MODAL
+            const deleteModal =
+                document.getElementById("deleteScheduleModal");
+
+            if (!deleteModal) return;
+
+            deleteModal.addEventListener("show.bs.modal", function(event) {
+
+                const button = event.relatedTarget;
+
+                const scheduleId =
+                    button.getAttribute("data-schedule-id");
+
+                const scheduleName =
+                    button.getAttribute("data-schedule-name");
+
+                document.getElementById("deleteScheduleId").value =
+                    scheduleId;
+
+                document.getElementById("deleteScheduleName").textContent =
+                    scheduleName;
 
             });
 

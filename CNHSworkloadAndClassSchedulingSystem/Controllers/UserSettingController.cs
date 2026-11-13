@@ -118,28 +118,95 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
         public async Task<IActionResult> EditUser(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 return NotFound();
             }
 
             var user = await _userManager.FindByIdAsync(id);
-
             if (user == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            var model = new EditUserViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName ?? string.Empty,
+                IsActive = user.IsActive
+            };
 
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(string id, EditUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
+            user.FirstName = model.FirstName.Trim();
+            user.LastName = model.LastName.Trim();
+            user.IsActive = model.IsActive;
 
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
 
+                return View(model);
+            }
 
+            TempData["SuccessMessage"] = $"User '{user.UserName}' was updated successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User was not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser != null && currentUser.Id == user.Id)
+            {
+                TempData["ErrorMessage"] = "You cannot delete your own account while signed in.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                TempData["ErrorMessage"] = string.Join(" ", result.Errors.Select(error => error.Description));
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["SuccessMessage"] = $"User '{user.UserName}' was deleted successfully.";
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }
-    
