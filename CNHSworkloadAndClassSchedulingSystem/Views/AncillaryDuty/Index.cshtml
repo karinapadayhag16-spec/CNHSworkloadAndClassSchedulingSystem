@@ -1,0 +1,185 @@
+﻿
+@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.AncillaryDuty>
+
+@{
+    ViewData["Title"] = "Ancillary Duties";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-11">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-primary d-flex justify-content-between align-items-center">
+
+                    <h3 class="mb-0 fw-bold text-white">
+                        <i class="bi bi-list-task"></i>
+                        Ancillary Duties
+                    </h3>
+
+                    <a asp-controller="AncillaryDuty"
+                       asp-action="Add"
+                       class="btn btn-light btn-sm">
+
+                        <i class="bi bi-plus-circle"></i>
+                        Add Duty
+
+                    </a>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show">
+                            @TempData["SuccessMessage"]
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert">
+                            </button>
+                        </div>
+                    }
+
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            @TempData["ErrorMessage"]
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert">
+                            </button>
+                        </div>
+                    }
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-hover align-middle">
+
+                            <thead class="table-light">
+
+                                <tr>
+                                    <th style="width: 8%;">#</th>
+                                    <th>Ancillary Duty</th>
+                                    <th style="width: 20%;">Weekly Minutes</th>
+                                    <th style="width: 22%;">Counts Toward Workload</th>
+                                    <th style="width: 15%;" class="text-center">Actions</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @if (Model.Any())
+                                {
+                                    var counter = 1;
+
+                                    foreach (var duty in Model)
+                                    {
+                                        <tr>
+
+                                            <td>@counter</td>
+
+                                            <td class="fw-semibold">
+                                                @duty.DutyName
+                                            </td>
+
+                                            <td>
+                                                @if (duty.FixedWeeklyMinutes.HasValue)
+                                                {
+                                                    <span class="badge bg-primary">
+                                                        @duty.FixedWeeklyMinutes.Value minutes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-info text-dark">
+                                                        Flexible
+                                                    </span>
+                                                }
+                                            </td>
+
+                                            <td>
+                                                @if (duty.CountsTowardWorkload)
+                                                {
+                                                    <span class="badge bg-success">Yes</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">No</span>
+                                                }
+                                            </td>
+
+                                            <td class="text-center">
+
+                                                <a asp-controller="AncillaryDuty"
+                                                   asp-action="Edit"
+                                                   asp-route-id="@duty.AncillaryDutyID"
+                                                   class="btn btn-sm btn-outline-primary"
+                                                   data-bs-toggle="tooltip"
+                                                   title="Edit ancillary duty">
+
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    Edit
+
+                                                </a>
+
+                                            </td>
+
+                                        </tr>
+
+                                        counter++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            No ancillary duties have been added yet.
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+
+                new bootstrap.Tooltip(tooltipTriggerEl);
+
+            });
+
+        });
+
+    </script>
+
+}

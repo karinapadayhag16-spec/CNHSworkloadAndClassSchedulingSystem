@@ -1,17 +1,20 @@
-﻿using CNHSworkloadAndClassSchedulingSystem.Models.Domain;
-using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
-
-public class Teacher
+﻿using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
+namespace CNHSworkloadAndClassSchedulingSystem.Models.Domain
 {
-    public int TeacherID { get; set; }
+        public class Teacher
+        {
+            public int TeacherID { get; set; }
+            public string FirstName { get; set; } = string.Empty;
+            public string LastName { get; set; } = string.Empty;
+            public bool IsArchived { get; set; } = false;
+            // Subject expertise remains associated with the permanent teacher record.
+            public ICollection<TeacherExpertise> SubjectExpertise { get; set; }
+                = new List<TeacherExpertise>();
 
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
+            // School-year-specific teacher assignments.
+            public ICollection<TeacherSchoolYearAssignment> SchoolYearAssignments
+            { get; set; } = new List<TeacherSchoolYearAssignment>();
+        }
+    }
 
-    public Department Department { get; set; }
 
-    public bool IsArchived { get; set; } = false;
-
-    public ICollection<TeacherExpertise> SubjectExpertise { get; set; }
-        = new List<TeacherExpertise>();
-}

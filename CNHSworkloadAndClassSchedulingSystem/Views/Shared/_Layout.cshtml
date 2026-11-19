@@ -147,6 +147,21 @@
 
                     </a>
                 </li>
+                
+                <li class="nav-item mb-2">
+                    <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "AncillaryDuty" ? "active" : "")"
+                       asp-controller="AncillaryDuty"
+                       asp-action="Index"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Manage Ancillary Duties">
+
+                        <i class="bi bi-list-task me-2"></i>
+                        Ancillary Duties
+
+                    </a>
+                </li>
+
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Subject" ? "active" : "")"

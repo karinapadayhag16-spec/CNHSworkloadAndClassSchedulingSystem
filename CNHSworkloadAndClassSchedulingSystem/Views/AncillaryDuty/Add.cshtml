@@ -1,0 +1,130 @@
+﻿
+@model CNHSworkloadAndClassSchedulingSystem.Models.Domain.AncillaryDuty
+
+@{
+    ViewData["Title"] = "Add Ancillary Duty";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-primary">
+                    <h3 class="mb-0 fw-bold text-white">
+                        <i class="bi bi-plus-circle"></i>
+                        Add Ancillary Duty
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-controller="AncillaryDuty"
+                          asp-action="Add"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+
+                            <label asp-for="DutyName"
+                                   class="form-label fw-bold">
+                                Duty Name
+                            </label>
+
+                            <input asp-for="DutyName"
+                                   class="form-control"
+                                   placeholder="e.g., ICT Coordinator" />
+
+                            <span asp-validation-for="DutyName"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="FixedWeeklyMinutes"
+                                   class="form-label fw-bold">
+                                Fixed Weekly Minutes (Optional)
+                            </label>
+
+                            <input asp-for="FixedWeeklyMinutes"
+                                   type="number"
+                                   min="0"
+                                   max="1800"
+                                   class="form-control"
+                                   placeholder="Leave blank for flexible minutes" />
+
+                            <span asp-validation-for="FixedWeeklyMinutes"
+                                  class="text-danger"></span>
+
+                            <small class="text-muted">
+                                Leave blank if users should specify the minutes
+                                when assigning this duty to a teacher.
+                                Enter a value if this duty must always use
+                                a fixed number of weekly minutes.
+                            </small>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <div class="form-check">
+
+                                <input asp-for="CountsTowardWorkload"
+                                       class="form-check-input" />
+
+                                <label asp-for="CountsTowardWorkload"
+                                       class="form-check-label fw-bold">
+                                    Counts Toward Workload
+                                </label>
+
+                            </div>
+
+                            <small class="text-muted">
+                                Enable this if the duty's assigned weekly
+                                minutes should be included in the teacher's
+                                workload calculation.
+                            </small>
+
+                        </div>
+
+                        <hr />
+
+                        <div class="text-end">
+
+                            <button type="submit"
+                                    class="btn btn-success">
+                                <i class="bi bi-save"></i>
+                                Save Duty
+                            </button>
+
+                            <a asp-controller="AncillaryDuty"
+                               asp-action="Index"
+                               class="btn btn-secondary">
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

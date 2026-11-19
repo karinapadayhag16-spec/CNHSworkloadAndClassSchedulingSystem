@@ -55,7 +55,9 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
 
             // Advisers for the selected School Year
             model.Advisers = await _context.Teachers
-                .Where(t => t.SchoolYearID == model.SchoolYearID)
+                .Where(t => !t.IsArchived &&
+                    t.SchoolYearAssignments.Any(a =>
+                        a.SchoolYearID == model.SchoolYearID))
                 .OrderBy(t => t.LastName)
                 .ThenBy(t => t.FirstName)
                 .Select(t => new SelectListItem
@@ -64,6 +66,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                     Text = t.LastName + ", " + t.FirstName
                 })
                 .ToListAsync();
+
         }
 
         // =========================================
@@ -281,7 +284,10 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 var adviserExists = await _context.Teachers
                     .AnyAsync(t =>
                         t.TeacherID == model.AdviserID.Value &&
-                        t.SchoolYearID == activeSchoolYear.SchoolYearId);
+                        !t.IsArchived &&
+                        t.SchoolYearAssignments.Any(a =>
+                            a.SchoolYearID == activeSchoolYear.SchoolYearId));
+
 
                 if (!adviserExists)
                 {
@@ -469,7 +475,8 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 bool adviserExists = await _context.Teachers
                     .AnyAsync(t =>
                         t.TeacherID == model.AdviserID.Value &&
-                        t.SchoolYearID == classSection.SchoolYearID);
+                        t.SchoolYearAssignments.Any(a =>
+                            a.SchoolYearID == classSection.SchoolYearID));
 
                 if (!adviserExists)
                 {

@@ -1,0 +1,118 @@
+﻿
+@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.TeacherAncillaryDutyViewModel
+
+@{
+    ViewData["Title"] = "Assign Ancillary Duties";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary">
+                    <h3 class="mb-0 fw-bold text-white">
+                        <i class="bi bi-person-plus"></i>
+                        Assign Ancillary Duties
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <h5 class="fw-bold">@Model.TeacherName</h5>
+                        <p class="text-muted mb-0">
+                            School Year: @Model.SchoolYearLabel
+                        </p>
+                    </div>
+
+                    <hr />
+
+                    <form asp-controller="Teacher"
+                          asp-action="AssignAncillaryDuties"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="TeacherID" />
+                        <input type="hidden" asp-for="TeacherAssignmentID" />
+
+                        <div class="mb-3">
+                            <label asp-for="TermID" class="form-label fw-bold">
+                                Select Term
+                            </label>
+
+                            <select asp-for="TermID"
+                                    asp-items="Model.AvailableTerms"
+                                    class="form-select">
+                            </select>
+
+                            <span asp-validation-for="TermID"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="AncillaryDutyID"
+                                   class="form-label fw-bold">
+                                Ancillary Duty
+                            </label>
+
+                            <select asp-for="AncillaryDutyID"
+                                    asp-items="Model.AvailableDuties"
+                                    class="form-select">
+                                <option value="">Select Ancillary Duty</option>
+                            </select>
+
+                            <span asp-validation-for="AncillaryDutyID"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="WeeklyMinutes"
+                                   class="form-label fw-bold">
+                                Weekly Minutes
+                            </label>
+
+                            <input asp-for="WeeklyMinutes"
+                                   type="number"
+                                   min="0"
+                                   max="1800"
+                                   class="form-control"
+                                   placeholder="Enter weekly minutes" />
+
+                            <span asp-validation-for="WeeklyMinutes"
+                                  class="text-danger"></span>
+
+                            <small class="text-muted">
+                                For flexible duties, enter the required
+                                weekly minutes. Fixed duties will use
+                                their configured minutes automatically
+                                when the assignment is saved.
+                            </small>
+                        </div>
+
+                        <hr />
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-save"></i>
+                                Assign Duty
+                            </button>
+
+                            <a asp-controller="Teacher"
+                               asp-action="Index"
+                               class="btn btn-secondary">
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back to Teachers
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

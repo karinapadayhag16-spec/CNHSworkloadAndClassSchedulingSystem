@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CNHSworkloadAndClassSchedulingSystem.Models.Enums;
 
@@ -16,9 +17,11 @@ namespace CNHSworkloadAndClassSchedulingSystem.Models.ViewModels
         [StringLength(100)]
         public string LastName { get; set; } = string.Empty;
 
+        // Department for the teacher's school-year assignment
         [Required(ErrorMessage = "Please select a department.")]
         public Department? Department { get; set; }
 
+        // School year for the teacher's assignment
         public int SchoolYearID { get; set; }
 
         // Dropdown data

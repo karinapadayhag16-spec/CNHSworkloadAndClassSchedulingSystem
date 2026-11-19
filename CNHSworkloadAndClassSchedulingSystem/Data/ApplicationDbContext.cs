@@ -21,16 +21,70 @@ namespace CNHSworkloadAndClassSchedulingSystem.Data
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<ClassSection> ClassSections { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        //added
-        
-         
-    
+        public DbSet<TeacherExpertise> TeacherExpertises { get; set; }
+        public DbSet<TeacherSchoolYearAssignment> TeacherSchoolYearAssignments { get; set; }
+        public DbSet<AncillaryDuty> AncillaryDuties { get; set; }
 
-
+        public DbSet<TeacherAncillaryDuty> TeacherAncillaryDuties { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            // Term - TeacherAncillaryDuty
+            modelBuilder.Entity<TeacherAncillaryDuty>()
+                .HasOne(d => d.Term)
+                .WithMany()
+                .HasForeignKey(d => d.TermID)
+                .OnDelete(DeleteBehavior.Restrict);
+            // TeacherSchoolYearAssignment Primary Key
+            modelBuilder.Entity<TeacherSchoolYearAssignment>()
+                .HasKey(a => a.TeacherAssignmentID);
+            // Teacher - TeacherSchoolYearAssignment
+            modelBuilder.Entity<TeacherSchoolYearAssignment>()
+                .HasOne(a => a.Teacher)
+                .WithMany(t => t.SchoolYearAssignments)
+                .HasForeignKey(a => a.TeacherID)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            // SchoolYear - TeacherSchoolYearAssignment
+            modelBuilder.Entity<TeacherSchoolYearAssignment>()
+                .HasOne(a => a.SchoolYear)
+                .WithMany()
+                .HasForeignKey(a => a.SchoolYearID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Prevent duplicate teacher assignments in the same school year
+            modelBuilder.Entity<TeacherSchoolYearAssignment>()
+                .HasIndex(a => new
+                {
+                    a.TeacherID,
+                    a.SchoolYearID
+                })
+                .IsUnique();
+
+
+            // TeacherSchoolYearAssignment - TeacherAncillaryDuty
+            modelBuilder.Entity<TeacherAncillaryDuty>()
+                .HasOne(d => d.TeacherAssignment)
+                .WithMany(a => a.AncillaryDuties)
+                .HasForeignKey(d => d.TeacherAssignmentID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // AncillaryDuty - TeacherAncillaryDuty
+            modelBuilder.Entity<TeacherAncillaryDuty>()
+                .HasOne(d => d.AncillaryDuty)
+                .WithMany(a => a.TeacherAncillaryDuties)
+                .HasForeignKey(d => d.AncillaryDutyID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Prevent duplicate duty assignments for the same teacher assignment
+            modelBuilder.Entity<TeacherAncillaryDuty>()
+                .HasIndex(a => new
+                {
+                    a.TeacherAssignmentID,
+                    a.TermID,
+                    a.AncillaryDutyID
+                })
+                .IsUnique();
 
             modelBuilder.Entity<SchoolYear>()
                 .HasIndex(s => s.YearLabel)

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CNHSworkloadAndClassSchedulingSystem.Models.Domain.Teacher>
+﻿@model CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.TeacherIndexPageViewModel
+
 @{
     ViewData["Title"] = "Teachers";
 }
@@ -25,6 +26,51 @@
 
     </div>
 
+    @if (!string.IsNullOrEmpty(Model.ActiveSchoolYear))
+    {
+        <div class="mb-3">
+            <span class="fw-semibold">School Year:</span>
+            @Model.ActiveSchoolYear
+        </div>
+    }
+
+    @if (Model.Terms.Any())
+    {
+        <form asp-controller="Teacher"
+              asp-action="Index"
+              method="get"
+              class="mb-3">
+
+            <div class="row align-items-center">
+
+                <div class="col-auto">
+                    <label for="termId" class="fw-semibold">
+                        Select Term:
+                    </label>
+                </div>
+
+                <div class="col-md-3">
+                    <select id="termId"
+                            name="termId"
+                            class="form-select"
+                            onchange="this.form.submit()">
+
+                        @foreach (var term in Model.Terms)
+                        {
+                            <option value="@term.Value"
+                                    selected="@(term.Value == Model.SelectedTermID.ToString())">
+                                @term.Text
+                            </option>
+                        }
+
+                    </select>
+                </div>
+
+            </div>
+
+        </form>
+    }
+
     <table class="table table-bordered table-hover text-center">
 
         <thead class="table-dark">
@@ -33,17 +79,19 @@
                 <th>Name</th>
                 <th>Department</th>
                 <th>Expertise</th>
-                <th>Actual Teaching Load</th>
+                <th>Ancillary Duties</th>
+                <th>Weekly Workload</th>
                 <th width="220">Actions</th>
             </tr>
         </thead>
 
         <tbody>
-            @if (Model != null && Model.Any())
+
+            @if (Model.Teachers.Any())
             {
                 int counter = 1;
 
-                @foreach (var teacher in Model)
+                @foreach (var teacher in Model.Teachers)
                 {
                     <tr>
                         <td>@counter</td>
@@ -52,14 +100,81 @@
                             @teacher.LastName, @teacher.FirstName
                         </td>
 
-                        <td>@teacher.Department</td>
-
                         <td>
-                            -
+                            @teacher.Department
                         </td>
 
                         <td>
-                            -
+                            @(string.IsNullOrWhiteSpace(teacher.Expertise)
+                                ? "-"
+                                : teacher.Expertise)
+                        </td>
+                        <td class="text-start">
+                            @if (teacher.AssignedAncillaryDuties.Any())
+                            {
+                                @foreach (var duty in teacher.AssignedAncillaryDuties)
+                                {
+                                    <div class="mb-2">
+                                        <div class="fw-semibold">
+                                            @duty.DutyName
+                                        </div>
+
+                                        <small class="text-muted">
+                                            @duty.WeeklyMinutes min/week
+                                        </small>
+
+                                        @if (duty.CountsTowardWorkload)
+                                        {
+                                            <span class="badge bg-success">
+                                                Counts
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Does not count
+                                            </span>
+                                        }
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">No duties assigned</span>
+                            }
+                        </td>
+
+                        <td>
+                            <div class="fw-bold">
+                                @teacher.TotalWorkloadHours.ToString("0.##") hours/week
+                            </div>
+
+                            <small class="text-muted d-block">
+                                Teaching: @teacher.ActualTeachingMinutes min
+                            </small>
+
+                            <small class="text-muted d-block">
+                                Ancillary: @teacher.AncillaryDutyMinutes min
+                            </small>
+
+                            <small class="text-muted d-block">
+                                Total: @teacher.TotalWorkloadMinutes min
+                            </small>
+
+                            <hr class="my-1" />
+
+                            @if (teacher.ExceedsMaximumWorkload)
+                            {
+                                <span class="badge bg-danger">
+                                    Exceeds 30-hour limit
+                                </span>
+                            }
+                            else
+                            {
+                                <small class="text-success">
+                                    Remaining: @teacher.RemainingWorkloadMinutes min
+                                </small>
+                            }
                         </td>
 
                         <td>
@@ -70,6 +185,20 @@
                                 <i class="bi bi-pencil-square"></i>
                                 Edit
                             </a>
+                            
+                            <a asp-controller="Teacher"
+                               asp-action="AssignAncillaryDuties"
+                               asp-route-id="@teacher.TeacherID"
+                               class="btn btn-sm btn-outline-success"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Assign ancillary duties to this teacher">
+
+                                <i class="bi bi-list-check"></i>
+                                Assign Duties
+
+                            </a>
+
                         </td>
                     </tr>
 
@@ -79,11 +208,12 @@
             else
             {
                 <tr>
-                    <td colspan="6" class="text-muted py-4">
+                    <td colspan="7" class="text-muted py-4">
                         No teachers have been added yet.
                     </td>
                 </tr>
             }
+
         </tbody>
 
     </table>
