@@ -1,9 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@{
+﻿@{
     ViewData["Title"] = "Add Subject";
 }
 
@@ -28,7 +23,11 @@
 
                 <div class="card-body p-4">
 
-                    <form>
+                    <form asp-controller="Subject"
+                          asp-action="AddSubject"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
 
                         <div class="row">
 
@@ -39,11 +38,13 @@
                                 </label>
 
                                 <input type="text"
+                                       name="subjectName"
                                        class="form-control"
                                        placeholder="e.g. Mathematics"
                                        data-bs-toggle="tooltip"
                                        data-bs-placement="right"
-                                       title="Enter the subject name" />
+                                       title="Enter the subject name"
+                                       required />
 
                             </div>
 
@@ -53,16 +54,24 @@
                                     Department
                                 </label>
 
-                                <select class="form-select"
+                                <select name="department"
+                                        class="form-select"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="right"
-                                        title="Select the department">
+                                        title="Select the department"
+                                        required>
 
-                                    <option>Select Department</option>
+                                    <option value="">
+                                        Select Department
+                                    </option>
 
-                                    <option>JHS</option>
+                                    <option value="JHS">
+                                        JHS
+                                    </option>
 
-                                    <option>SHS</option>
+                                    <option value="SHS">
+                                        SHS
+                                    </option>
 
                                 </select>
 
@@ -78,24 +87,40 @@
                                     Grade Level
                                 </label>
 
-                                <select class="form-select"
+                                <select name="gradeLevel"
+                                        class="form-select"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="right"
-                                        title="Select the grade level">
+                                        title="Select the grade level"
+                                        required>
 
-                                    <option>Select Grade Level</option>
+                                    <option value="">
+                                        Select Grade Level
+                                    </option>
 
-                                    <option>Grade 7</option>
+                                    <option value="Grade 7">
+                                        Grade 7
+                                    </option>
 
-                                    <option>Grade 8</option>
+                                    <option value="Grade 8">
+                                        Grade 8
+                                    </option>
 
-                                    <option>Grade 9</option>
+                                    <option value="Grade 9">
+                                        Grade 9
+                                    </option>
 
-                                    <option>Grade 10</option>
+                                    <option value="Grade 10">
+                                        Grade 10
+                                    </option>
 
-                                    <option>Grade 11</option>
+                                    <option value="Grade 11">
+                                        Grade 11
+                                    </option>
 
-                                    <option>Grade 12</option>
+                                    <option value="Grade 12">
+                                        Grade 12
+                                    </option>
 
                                 </select>
 
@@ -108,11 +133,14 @@
                                 </label>
 
                                 <input type="number"
+                                       name="numberOfClasses"
                                        class="form-control"
                                        placeholder="e.g. 3"
+                                       min="1"
                                        data-bs-toggle="tooltip"
                                        data-bs-placement="right"
-                                       title="Enter the number of class sections taking this subject" />
+                                       title="Enter the number of class sections taking this subject"
+                                       required />
 
                             </div>
 

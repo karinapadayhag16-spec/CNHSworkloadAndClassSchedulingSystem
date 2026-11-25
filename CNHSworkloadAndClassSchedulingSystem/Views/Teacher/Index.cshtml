@@ -145,9 +145,72 @@
                         </td>
 
                         <td>
-                            <div class="fw-bold">
+
+                            @{
+                                double countedMinutes =
+                                    teacher.ActualTeachingMinutes +
+                                    teacher.AssignedAncillaryDuties
+                                        .Where(d => d.CountsTowardWorkload)
+                                        .Sum(d => d.WeeklyMinutes);
+
+                                double nonCountedMinutes =
+                                    teacher.AssignedAncillaryDuties
+                                        .Where(d => !d.CountsTowardWorkload)
+                                        .Sum(d => d.WeeklyMinutes);
+
+                                double countedPercent =
+                                    (countedMinutes / 1800.0) * 100;
+
+                                double nonCountedPercent =
+                                    (nonCountedMinutes / 1800.0) * 100;
+
+                                countedPercent = Math.Min(countedPercent, 100);
+                                nonCountedPercent = Math.Min(nonCountedPercent, 100);
+                            }
+
+                            <div class="fw-bold mb-2">
                                 @teacher.TotalWorkloadHours.ToString("0.##") hours/week
                             </div>
+
+                            @if (teacher.ExceedsMaximumWorkload)
+                            {
+                                <div class="progress mb-2"
+                                     style="
+                                    height:28px;
+                                    border-radius:15px;
+                                    background-color:#e9ecef;
+                                    overflow:hidden;">
+
+                                    <div class="progress-bar bg-danger"
+                                         role="progressbar"
+                                         style="width:100%">
+                                    </div>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="progress mb-2"
+                                     style="
+                                    height:28px;
+                                    border-radius:15px;
+                                    background-color:#e9ecef;
+                                    overflow:hidden;">
+
+                                    <div class="progress-bar bg-success"
+                                         role="progressbar"
+                                         style="width:@countedPercent%">
+                                    </div>
+
+                                    <div class="progress-bar"
+                                         role="progressbar"
+                                         style="
+                                        width:@nonCountedPercent%;
+                                        background-color:#6c757d;">
+                                    </div>
+
+                                </div>
+                            }
 
                             <small class="text-muted d-block">
                                 Teaching: @teacher.ActualTeachingMinutes min
@@ -171,11 +234,13 @@
                             }
                             else
                             {
-                                <small class="text-success">
+                                <small class="text-success fw-bold">
                                     Remaining: @teacher.RemainingWorkloadMinutes min
                                 </small>
                             }
+
                         </td>
+
 
                         <td>
                             <a asp-controller="Teacher"

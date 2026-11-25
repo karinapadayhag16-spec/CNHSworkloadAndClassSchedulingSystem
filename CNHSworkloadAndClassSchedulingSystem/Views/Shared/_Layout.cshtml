@@ -135,33 +135,67 @@
                 </li>
 
                 <li class="nav-item mb-2">
-                    <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Teacher" ? "active" : "")"
-                       asp-controller="Teacher"
-                       asp-action="Index"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="right"
-                       title="Manage Teachers">
 
-                        <i class="bi bi-person-badge me-2"></i>
-                        Teachers
+                    <a class="nav-link fw-semibold d-flex justify-content-between align-items-center
+                        @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Teacher" ||
+                         ViewContext.RouteData.Values["Controller"]?.ToString() == "AncillaryDuty"
+                         ? "active" : "")"
+                       data-bs-toggle="collapse"
+                       href="#teacherMenu"
+                       role="button"
+                       aria-expanded="false"
+                       aria-controls="teacherMenu">
 
-                    </a>
-                </li>
-                
-                <li class="nav-item mb-2">
-                    <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "AncillaryDuty" ? "active" : "")"
-                       asp-controller="AncillaryDuty"
-                       asp-action="Index"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="right"
-                       title="Manage Ancillary Duties">
+                        <span>
+                            <i class="bi bi-person-badge me-2"></i>
+                            Teachers
+                        </span>
 
-                        <i class="bi bi-list-task me-2"></i>
-                        Ancillary Duties
+                        <i class="bi bi-caret-down-fill"></i>
 
                     </a>
-                </li>
 
+                    <div class="collapse
+                        @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Teacher" ||
+                          ViewContext.RouteData.Values["Controller"]?.ToString() == "AncillaryDuty"
+                          ? "show" : "")"
+                         id="teacherMenu">
+
+                        <ul class="nav flex-column ms-4 mt-2">
+
+                            <li class="nav-item mb-2">
+
+                                <a class="nav-link fw-semibold
+                                    @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Teacher" ? "active" : "")"
+                                   asp-controller="Teacher"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-person me-2"></i>
+                                    Manage Teachers
+
+                                </a>
+
+                            </li>
+
+                            <li class="nav-item mb-2">
+
+                                <a class="nav-link fw-semibold
+                                    @(ViewContext.RouteData.Values["Controller"]?.ToString() == "AncillaryDuty" ? "active" : "")"
+                                   asp-controller="AncillaryDuty"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-list-task me-2"></i>
+                                    Ancillary Duties
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </li>   
 
                 <li class="nav-item mb-2">
                     <a class="nav-link fw-semibold @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Subject" ? "active" : "")"

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<CNHSworkloadAndClassSchedulingSystem.Models.ViewModels.SubjectViewModel>
+
+@{
     ViewData["Title"] = "Subjects";
 }
 
@@ -24,6 +26,22 @@
 
     </div>
 
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
     <table class="table table-bordered table-hover text-center">
 
         <thead class="table-dark">
@@ -48,16 +66,58 @@
 
         <tbody>
 
-            <tr>
+            @if (Model != null && Model.Any())
+            {
+                int count = 1;
 
-                <td colspan="6"
-                    class="text-muted py-4">
+                @foreach (var subject in Model)
+                {
+                    <tr>
 
-                    No subjects have been added yet.
+                        <td>@count</td>
 
-                </td>
+                        <td>@subject.SubjectName</td>
 
-            </tr>
+                        <td>@subject.Department</td>
+
+                        <td>@subject.GradeLevel</td>
+
+                        <td>@subject.NumberOfClasses</td>
+
+                        <td>
+
+                            <a asp-controller="Subject"
+                               asp-action="EditSubject"
+                               class="btn btn-warning btn-sm"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Edit this subject">
+
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    count++;
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="6"
+                        class="text-muted py-4">
+
+                        No subjects have been added yet.
+
+                    </td>
+
+                </tr>
+            }
 
         </tbody>
 
