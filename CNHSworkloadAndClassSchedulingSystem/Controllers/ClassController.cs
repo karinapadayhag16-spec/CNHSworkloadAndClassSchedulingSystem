@@ -53,22 +53,52 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 })
                 .ToList();
 
-            // Advisers for the selected School Year
+            // Teachers already assigned as JHS advisers
+           
+            var assignedJhsAdviserIds = await _context.ClassSections
+                .Where(cs =>
+                    cs.SchoolYearID == model.SchoolYearID &&
+                    cs.Department == Department.JHS &&
+                    cs.AdviserID.HasValue)
+                .Select(cs => cs.AdviserID!.Value)
+                .Distinct()
+                .ToListAsync();
+
+            // Only teachers with "Class Adviser" ancillary duty
             model.Advisers = await _context.Teachers
-                .Where(t => !t.IsArchived &&
+                .Where(t =>
+                    !t.IsArchived &&
                     t.SchoolYearAssignments.Any(a =>
-                        a.SchoolYearID == model.SchoolYearID))
+                        a.SchoolYearID == model.SchoolYearID &&
+                        a.AncillaryDuties.Any(d =>
+                            d.AncillaryDuty.DutyName == "Class Adviser")))
+                .Where(t =>
+
+                    // SHS teachers can always appear
+                    t.SchoolYearAssignments.Any(a =>
+                        a.SchoolYearID == model.SchoolYearID &&
+                        a.Department == Department.SHS)
+
+                    ||
+
+                    // JHS teachers appear only if not yet assigned
+                    (
+                        t.SchoolYearAssignments.Any(a =>
+                            a.SchoolYearID == model.SchoolYearID &&
+                            a.Department == Department.JHS)
+                        &&
+                        !assignedJhsAdviserIds.Contains(t.TeacherID)
+                    )
+                )
                 .OrderBy(t => t.LastName)
                 .ThenBy(t => t.FirstName)
                 .Select(t => new SelectListItem
                 {
                     Value = t.TeacherID.ToString(),
-                    Text = t.LastName + ", " + t.FirstName
+                    Text = $"{t.LastName}, {t.FirstName}"
                 })
                 .ToListAsync();
-
         }
-
         // =========================================
         // GET PREVIOUS CLASS SECTION
         // =========================================
@@ -288,15 +318,30 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                         t.SchoolYearAssignments.Any(a =>
                             a.SchoolYearID == activeSchoolYear.SchoolYearId));
 
-
                 if (!adviserExists)
                 {
                     ModelState.AddModelError(
                         "AdviserID",
                         "Please select a valid adviser for the active school year.");
                 }
-            }
 
+                // JHS teachers can only advise one class
+                if (model.Department == Department.JHS)
+                {
+                    bool alreadyAssigned = await _context.ClassSections
+                        .AnyAsync(cs =>
+                            cs.SchoolYearID == activeSchoolYear.SchoolYearId &&
+                            cs.Department == Department.JHS &&
+                            cs.AdviserID == model.AdviserID.Value);
+
+                    if (alreadyAssigned)
+                    {
+                        ModelState.AddModelError(
+                            "AdviserID",
+                            "This teacher is already assigned as adviser to another JHS class.");
+                    }
+                }
+            }
             // Check for duplicate class sections
             if (ModelState.IsValid)
             {
@@ -484,8 +529,25 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                         "AdviserID",
                         "The selected adviser is not valid for this school year.");
                 }
-            }
 
+                // JHS teachers can only advise one JHS class
+                if (model.Department == Department.JHS)
+                {
+                    bool alreadyAssigned = await _context.ClassSections
+                        .AnyAsync(cs =>
+                            cs.ClassSectionID != model.ClassSectionID &&
+                            cs.SchoolYearID == activeSchoolYear.SchoolYearId &&
+                            cs.Department == Department.JHS &&
+                            cs.AdviserID == model.AdviserID.Value);
+
+                    if (alreadyAssigned)
+                    {
+                        ModelState.AddModelError(
+                            "AdviserID",
+                            "This teacher is already assigned as adviser to another JHS class.");
+                    }
+                }
+            }
             // Check for duplicate class sections
             if (ModelState.IsValid)
             {
@@ -510,6 +572,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             // Return the form if validation fails
             if (!ModelState.IsValid)
             {
+                await PopulateClassDropdowns(model);
                 await PopulateClassDropdowns(model);
                 return View(model);
             }
