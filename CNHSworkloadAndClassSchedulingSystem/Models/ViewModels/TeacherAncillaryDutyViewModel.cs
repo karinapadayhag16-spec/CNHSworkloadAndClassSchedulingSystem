@@ -25,5 +25,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Models.ViewModels
 
         public List<SelectListItem> AvailableDuties { get; set; }
             = new();
+        public List<AssignedAncillaryDutyViewModel> AssignedDuties
+        { get; set; } = new();
     }
 }

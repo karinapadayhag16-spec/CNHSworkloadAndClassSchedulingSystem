@@ -366,6 +366,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
         }
 
 
+
         [HttpGet]
         public async Task<IActionResult> AssignAncillaryDuties(
             int id, int? termId)
@@ -398,7 +399,8 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
             // Retrieve terms belonging to the active school year
             var terms = await _context.Terms
                 .AsNoTracking()
-                .Where(t => t.SchoolYearID == activeSchoolYear.SchoolYearId)
+                .Where(t =>
+                    t.SchoolYearID == activeSchoolYear.SchoolYearId)
                 .OrderBy(t => t.TermNumber)
                 .ToListAsync();
 
@@ -410,7 +412,7 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Use the selected term, or default to Term 1
+            // Use the selected term, or default to the first term
             var selectedTerm = terms.FirstOrDefault(t =>
                 t.TermID == termId) ?? terms.First();
 
@@ -420,12 +422,31 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                 .OrderBy(d => d.DutyName)
                 .ToListAsync();
 
+            // Retrieve duties already assigned for the selected term
+            var assignedDuties = await _context.TeacherAncillaryDuties
+                .AsNoTracking()
+                .Include(d => d.AncillaryDuty)
+                .Where(d =>
+                    d.TeacherAssignmentID == assignment.TeacherAssignmentID &&
+                    d.TermID == selectedTerm.TermID)
+                .OrderBy(d => d.AncillaryDuty.DutyName)
+                .Select(d => new AssignedAncillaryDutyViewModel
+                {
+                    DutyName = d.AncillaryDuty.DutyName,
+                    WeeklyMinutes = d.WeeklyMinutes,
+                    CountsTowardWorkload = d.CountsTowardWorkload
+                })
+                .ToListAsync();
+
             // Prepare the assignment form
             var model = new TeacherAncillaryDutyViewModel
             {
                 TeacherID = assignment.TeacherID,
                 TeacherAssignmentID = assignment.TeacherAssignmentID,
-                TeacherName = $"{assignment.Teacher.FirstName} {assignment.Teacher.LastName}",
+
+                TeacherName =
+                    $"{assignment.Teacher.FirstName} {assignment.Teacher.LastName}",
+
                 SchoolYearLabel = activeSchoolYear.YearLabel ?? string.Empty,
 
                 TermID = selectedTerm.TermID,
@@ -443,13 +464,13 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                     Text = d.FixedWeeklyMinutes.HasValue
                         ? $"{d.DutyName} ({d.FixedWeeklyMinutes.Value} min/week - Fixed)"
                         : $"{d.DutyName} (Flexible minutes)"
-                }).ToList()
+                }).ToList(),
+
+                AssignedDuties = assignedDuties
             };
 
             return View(model);
         }
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -570,6 +591,23 @@ namespace CNHSworkloadAndClassSchedulingSystem.Controllers
                         ? $"{d.DutyName} ({d.FixedWeeklyMinutes.Value} min/week - Fixed)"
                         : $"{d.DutyName} (Flexible minutes)"
                 }).ToList();
+
+                var assignedDuties = await _context.TeacherAncillaryDuties
+                    .AsNoTracking()
+                    .Include(d => d.AncillaryDuty)
+                    .Where(d =>
+                        d.TeacherAssignmentID == assignment.TeacherAssignmentID &&
+                        d.TermID == model.TermID)
+                    .OrderBy(d => d.AncillaryDuty.DutyName)
+                    .Select(d => new AssignedAncillaryDutyViewModel
+                    {
+                        DutyName = d.AncillaryDuty.DutyName,
+                        WeeklyMinutes = d.WeeklyMinutes,
+                        CountsTowardWorkload = d.CountsTowardWorkload
+                    })
+                    .ToListAsync();
+
+                model.AssignedDuties = assignedDuties;
 
                 return View(model);
             }
