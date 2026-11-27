@@ -1,0 +1,57 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Documentation";
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<div class="container mt-5">
+
+    <a asp-controller="Account"
+       asp-action="Login"
+       class="btn btn-secondary mb-4">
+
+        <i class="bi bi-arrow-left"></i>
+        Back
+
+    </a>
+
+    <div class="card shadow">
+
+        <div class="card-header bg-danger text-white">
+
+            <h3 class="mb-0">
+                Documentation
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-5">
+
+                    <img src="~/images/documentation.png"
+                         class="img-fluid rounded"
+                         alt="Documentation Image" />
+
+                </div>
+
+                <div class="col-md-7">
+
+                    <h4>System Documentation</h4>
+
+                    <p>
+                        Complete guide for using the Automated Faculty Workload Scheduling System.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

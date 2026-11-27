@@ -1,78 +1,50 @@
 ﻿@{
-    ViewData["Title"] = "Documentation";
+    Layout = null;
+    ViewData["Title"] = "Instruction";
 }
 
-<div class="container mt-4">
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-    <div class="card shadow-lg border-0">
+<div class="container mt-5">
 
-        <div class="card-header bg-primary">
+    <a asp-controller="Account"
+       asp-action="Login"
+       class="btn btn-secondary mb-4">
 
-            <h3 class="mb-0 fw-bold text-white">
+        <i class="bi bi-arrow-left"></i>
+        Back
 
-                <i class="bi bi-file-earmark-text"></i>
-                System Documentation
+    </a>
 
+    <div class="card shadow">
+
+        <div class="card-header bg-danger text-white">
+
+            <h3 class="mb-0">
+                Documentation
             </h3>
 
         </div>
 
         <div class="card-body">
 
-            <div class="row align-items-center">
+            <div class="row">
 
-                <!-- Left Image -->
-                <div class="col-md-5 text-center">
+                <div class="col-md-5">
 
-                    <img src="~/images/documentation-placeholder.png"
-                         class="img-fluid rounded shadow"
-                         alt="Documentation Image"
-                         style="max-height:400px;" />
+                    <img src="~/images/documentation.png"
+                         class="img-fluid rounded"
+                         alt="Documentation Image" />
 
                 </div>
 
-                <!-- Right Instruction -->
                 <div class="col-md-7">
 
-                    <h4 class="fw-bold mb-3">
-                        How to Use the System
-                    </h4>
+                    <h4>System Documentation</h4>
 
-                    <ol class="fs-5">
-
-                        <li class="mb-3">
-                            Set the Active School Year.
-                        </li>
-
-                        <li class="mb-3">
-                            Configure Terms for the selected school year.
-                        </li>
-
-                        <li class="mb-3">
-                            Add Teachers and assign their expertise.
-                        </li>
-
-                        <li class="mb-3">
-                            Assign Ancillary Duties when necessary.
-                        </li>
-
-                        <li class="mb-3">
-                            Create Class Sections.
-                        </li>
-
-                        <li class="mb-3">
-                            Add Subjects and Subject Offerings.
-                        </li>
-
-                        <li class="mb-3">
-                            Generate Faculty Workload Schedules.
-                        </li>
-
-                        <li class="mb-3">
-                            Review and finalize generated schedules.
-                        </li>
-
-                    </ol>
+                    <p>
+                        Complete guide for using the Automated Faculty Workload Scheduling System.
+                    </p>
 
                 </div>
 

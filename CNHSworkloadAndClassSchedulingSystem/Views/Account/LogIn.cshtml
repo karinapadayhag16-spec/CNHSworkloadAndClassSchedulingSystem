@@ -118,3 +118,42 @@
     </div>
 
 </div>
+
+<div style="
+    position: fixed;
+    bottom: 20px;
+    right: 40px;
+    z-index: 1000;">
+
+    <a asp-controller="Instruction"
+       asp-action="Index"
+       class="footer-link">
+        Tutorial
+    </a>
+
+    <span class="mx-2 text-muted">|</span>
+
+    <a asp-controller="Documentation"
+       asp-action="Index"
+       class="footer-link">
+        Documentation
+    </a>
+
+ 
+</div>
+
+<style>
+
+    .footer-link{
+        color:#6c757d;
+        text-decoration:none;
+        font-size:14px;
+        transition:.3s;
+    }
+
+    .footer-link:hover{
+        color:#8B0000;
+        text-decoration:underline;
+    }
+
+</style>
